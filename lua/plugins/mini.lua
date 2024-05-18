@@ -26,31 +26,61 @@ return {
       local starter = require('mini.starter')
       local ascii = require('plugins.dev.ascii')
 
-      local width = 70
+      local width = 80
       local header = {
         ascii.center(ascii.art.shark(), width),
       }
       local footer = {
+        '',
         ascii.center(ascii.art.fish(), width),
-        ascii.center('I use vim btw\n', width),
+        ascii.center('I use vim btw', width),
       }
 
       local palette = require('catppuccin.palettes').get_palette()
       vim.api.nvim_set_hl(0, 'MiniStarterHeader', { fg = palette.sky, bold = true })
       vim.api.nvim_set_hl(0, 'MiniStarterFooter', { fg = palette.mauve, bold = true })
 
-      local menu_padding = string.rep(' ', 21)
-      local section = menu_padding .. 'Commands:'
-      return {
-        evaluate_single = true,
-        header = table.concat(header, '\n'),
-        items = {
-          { name = 'Resume last session', action = 'lua require("persistence").load()', section = section },
+      local menu_padding = string.rep(' ', 15)
+
+      local function command_items()
+        local section = menu_padding .. 'Commands'
+        return {
+          {
+            name = 'Resume last session',
+            action = function()
+              require('persistence').load()
+            end,
+            section = section,
+          },
           { name = 'Find file', action = 'Telescope find_files', section = section },
           { name = 'Grep text', action = 'Telescope live_grep', section = section },
           { name = 'New File', action = 'ene | startinsert', section = section },
           { name = 'Lazy', action = 'Lazy', section = section },
           { name = 'Quit', action = 'qa', section = section },
+        }
+      end
+
+      local function harpoon_items()
+        local harpoon_list = require('harpoon'):list()
+        local items = {}
+        for k, v in pairs(harpoon_list.items) do
+          items[#items + 1] = {
+            name = k .. ' - ' .. vim.fn.fnamemodify(v.value, ':t'),
+            action = function()
+              harpoon_list:select(k)
+            end,
+            section = menu_padding .. 'Harpoon',
+          }
+        end
+        return items
+      end
+
+      return {
+        evaluate_single = true,
+        header = table.concat(header, '\n'),
+        items = {
+          command_items(),
+          harpoon_items(),
         },
         content_hooks = {
           starter.gen_hook.adding_bullet(menu_padding .. '\u{f18ba}  ', false),

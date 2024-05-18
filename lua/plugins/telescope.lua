@@ -34,10 +34,11 @@ return {
           mappings = {
             i = {
               ['<esc>'] = require('telescope.actions').close,
-              ['<C-q>'] = require('telescope.actions').close,
+              ['<c-t>'] = require('trouble.sources.telescope').open,
               ['<C-j>'] = require('telescope.actions').move_selection_next,
               ['<C-k>'] = require('telescope.actions').move_selection_previous,
             },
+            n = { ['<c-t>'] = require('trouble.sources.telescope').open }, -- ['<C-q>'] = require('telescope.actions').close,
           },
         },
         pickers = {

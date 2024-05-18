@@ -21,7 +21,7 @@ return {
 
           map('gd', telescope.lsp_definitions, '[G]oto [D]efinition')
           map('gr', telescope.lsp_references, '[G]oto [R]eferences')
-          map('<leader>D', telescope.lsp_type_definitions, 'Type [D]efinition')
+          map('gD', telescope.lsp_type_definitions, '[G]oto Type [D]efinition')
 
           map('<leader>fs', telescope.lsp_document_symbols, 'Document [S]ymbols')
           map('<leader>fS', telescope.lsp_dynamic_workspace_symbols, 'Workspace [S]ymbols')
@@ -30,7 +30,18 @@ return {
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
-          map('<c-k>', vim.lsp.buf.signature_help, 'Signature Help')
+          map('<leader>k>', vim.lsp.buf.signature_help, 'Signature Help')
+
+          -- diagnostics
+          map('<leader>cd', vim.diagnostic.open_float, '[D]iagnostic')
+          map(']d', vim.diagnostic.goto_next, 'Next [D]iagnostic')
+          map('[d', vim.diagnostic.goto_prev, 'Prev [D]iagnostic')
+          map(']e', function()
+            vim.diagnostic.goto_next({ severity = 'ERROR' })
+          end, 'Next [E]rror')
+          map('[e', function()
+            vim.diagnostic.goto_prev({ severity = 'ERROR' })
+          end, 'Prev [E]rror')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
 
@@ -102,37 +113,7 @@ return {
 
       local servers = {
         angularls = {},
-        tsserver = {
-          settings = {
-            typescript = {
-              inlayHints = {
-                includeInlayParameterNameHints = 'none',
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = false,
-                includeInlayVariableTypeHints = true,
-                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
-              },
-            },
-            javascript = {
-              inlayHints = {
-                includeInlayParameterNameHints = 'none',
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = false,
-                includeInlayVariableTypeHints = true,
-                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = false,
-                includeInlayEnumMemberValueHints = true,
-              },
-            },
-          },
-          completions = {
-            completeFunctionCalls = true,
-          },
-        },
+        tsserver = {}, -- configured below with typescript-tools
         lua_ls = {
           settings = {
             Lua = {
@@ -165,6 +146,10 @@ return {
       require('mason-lspconfig').setup({
         handlers = {
           function(server_name)
+            -- configured below with typescript-tools
+            if server_name == 'tsserver' then
+              return
+            end
             local server = servers[server_name] or {}
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
@@ -221,13 +206,44 @@ return {
   -- Better Typescript support
   {
     'pmizio/typescript-tools.nvim',
+    event = 'BufReadPost',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     keys = {
       { '<leader>cio', '<cmd>TSToolsOrganizeImports<cr>', desc = '[C]ode [I]mports [O]rganize' },
       { '<leader>cia', '<cmd>TSToolsAddMissingImports<cr>', desc = '[C]ode [I]mports [A]dd missing' },
       { '<leader>cf', '<cmd>TSToolsFixAll<cr>', desc = '[C]ode [F]ix All' },
     },
-    opts = {},
+    opts = {
+      settings = {
+        typescript = {
+          inlayHints = {
+            includeInlayParameterNameHints = 'none',
+            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+            includeInlayFunctionParameterTypeHints = false,
+            includeInlayVariableTypeHints = true,
+            includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayEnumMemberValueHints = true,
+          },
+        },
+        javascript = {
+          inlayHints = {
+            includeInlayParameterNameHints = 'none',
+            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+            includeInlayFunctionParameterTypeHints = false,
+            includeInlayVariableTypeHints = true,
+            includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = false,
+            includeInlayEnumMemberValueHints = true,
+          },
+        },
+      },
+      completions = {
+        completeFunctionCalls = true,
+      },
+    },
   },
   -- Check whole project for Typescript errors
   {
@@ -242,7 +258,8 @@ return {
       },
     },
     opts = {
-      auto_open_qflist = false,
+      auto_open_qflist = true,
+      use_trouble_qflist = true,
     },
   },
   -- Support for package.json dependency management
