@@ -86,9 +86,22 @@ return {
       'nvim-lua/plenary.nvim',
       'lewis6991/gitsigns.nvim',
     },
-    opts = {},
+    opts = {
+
+      keymaps = {
+        view = {
+          -- close mapping & fix noice setting buffer dirty
+          { 'n', 'q', '<cmd>set hidden<cr><cmd>DiffviewClose<cr><cmd>set nohidden<cr>' },
+        },
+        file_panel = {
+          { 'n', 'q', '<cmd>set hidden<cr><cmd>DiffviewClose<cr><cmd>set nohidden<cr>' },
+        },
+        file_history_panel = {
+          { 'n', 'q', '<cmd>set hidden<cr><cmd>DiffviewClose<cr><cmd>set nohidden<cr>' },
+        },
+      },
+    },
     keys = {
-      { '<leader>gh', '<cmd>DiffviewOpen<cr>', desc = '[G]it [D]iff' },
       {
         '<leader>ghl',
         function()
@@ -98,7 +111,7 @@ return {
           local cmd = string.format('DiffviewFileHistory --follow -L%s,%s:%s', current_line, current_line, file)
           vim.cmd(cmd)
         end,
-        desc = 'Line history',
+        desc = '[G]it [H]istory [L]ine',
       },
     },
   },

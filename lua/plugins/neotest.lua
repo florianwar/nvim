@@ -23,63 +23,69 @@ return {
         },
       }
     end,
-    keys = {
-      {
-        '<leader>nt',
-        function()
-          require('neotest').run.run(vim.fn.expand('%'))
-        end,
-        desc = '[N]eotest Run File',
-      },
-      {
-        '<leader>nT',
-        function()
-          require('neotest').run.run(vim.uv.cwd())
-        end,
-        desc = 'Run All Test Files',
-      },
-      {
-        '<leader>nr',
-        function()
-          require('neotest').run.run()
-        end,
-        desc = 'Run Nearest',
-      },
-      {
-        '<leader>nl',
-        function()
-          require('neotest').run.run_last()
-        end,
-        desc = 'Run Last',
-      },
-      {
-        '<leader>ns',
-        function()
-          require('neotest').summary.toggle()
-        end,
-        desc = 'Toggle Summary',
-      },
-      {
-        '<leader>no',
-        function()
-          require('neotest').output.open({ enter = true, auto_close = true })
-        end,
-        desc = 'Show Output',
-      },
-      {
-        '<leader>nO',
-        function()
-          require('neotest').output_panel.toggle()
-        end,
-        desc = 'Toggle Output Panel',
-      },
-      {
-        '<leader>nS',
-        function()
-          require('neotest').run.stop()
-        end,
-        desc = 'Stop',
-      },
-    },
+    keys = function()
+      require('which-key').register({
+        ['<leader>n'] = { name = '[N]eotest', _ = 'which_key_ignore' },
+      })
+
+      return {
+        {
+          '<leader>nt',
+          function()
+            require('neotest').run.run(vim.fn.expand('%'))
+          end,
+          desc = '[T]eotest Run File',
+        },
+        {
+          '<leader>nT',
+          function()
+            require('neotest').run.run(vim.uv.cwd())
+          end,
+          desc = 'Run All Test Files',
+        },
+        {
+          '<leader>nr',
+          function()
+            require('neotest').run.run()
+          end,
+          desc = 'Run Nearest',
+        },
+        {
+          '<leader>nl',
+          function()
+            require('neotest').run.run_last()
+          end,
+          desc = 'Run Last',
+        },
+        {
+          '<leader>ns',
+          function()
+            require('neotest').summary.toggle()
+          end,
+          desc = 'Toggle Summary',
+        },
+        {
+          '<leader>no',
+          function()
+            require('neotest').output.open({ enter = true, auto_close = true })
+          end,
+          desc = 'Show Output',
+        },
+        {
+          '<leader>nO',
+          function()
+            require('neotest').output_panel.toggle()
+          end,
+          desc = 'Toggle Output Panel',
+        },
+        {
+          '<leader>nS',
+          function()
+            require('neotest').run.stop()
+          end,
+          desc = 'Stop',
+        },
+      }
+    end,
   },
 }

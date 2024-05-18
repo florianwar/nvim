@@ -2,7 +2,6 @@ return {
   {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
-    branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
       {
@@ -15,28 +14,23 @@ return {
       { 'nvim-tree/nvim-web-devicons' },
     },
     config = function()
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = 'TelescopeResults',
-        callback = function(ctx)
-          vim.api.nvim_buf_call(ctx.buf, function()
-            vim.fn.matchadd('TelescopeParent', '\t\t.*$')
-            vim.api.nvim_set_hl(0, 'TelescopeParent', { link = 'Comment' })
-          end)
-        end,
-      })
-
-      local function filenameFirst(_, path)
-        local tail = vim.fs.basename(path)
-        local parent = vim.fs.dirname(path)
-        if parent == '.' then
-          return tail
-        end
-        return string.format('%s\t\t%s', tail, parent)
-      end
-
-      require('telescope').setup({
+      local telescope = require('telescope')
+      telescope.setup({
         defaults = {
-          path_display = filenameFirst,
+          path_display = function(_, path)
+            local filename = require('telescope.utils').path_tail(path)
+            local location = require('plenary.strings').truncate(path, #path - #filename, '')
+            local pathToDisplay = require('telescope.utils').transform_path({ path_display = { 'truncate' } }, location)
+            path = string.format('%s %s ', filename, pathToDisplay)
+
+            local highlights = {
+              { { 0, #filename }, 'Field' },
+              { { #filename, #path }, 'Comment' },
+            }
+
+            return path, highlights
+          end,
+
           mappings = {
             i = {
               ['<esc>'] = require('telescope.actions').close,
@@ -83,21 +77,21 @@ return {
       })
 
       -- Enable Telescope extensions if they are installed
-      pcall(require('telescope').load_extension, 'fzf')
-      pcall(require('telescope').load_extension, 'ui-select')
-      pcall(require('telescope').load_extension, 'emoji')
+      pcall(telescope.load_extension, 'fzf')
+      pcall(telescope.load_extension, 'ui-select')
+      pcall(telescope.load_extension, 'emoji')
 
       -- See `:help telescope.builtin`
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = '[F]ind [H]elp' })
       vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = '[F]ind [K]eymaps' })
       vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = '[F]ind [B]uffers' })
-      vim.keymap.set('n', '<leader>fs', builtin.builtin, { desc = '[F]ind [S]elect Telescope' })
+      vim.keymap.set('n', '<leader>ft', builtin.builtin, { desc = '[F]ind [T]elescope builtins' })
       vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = '[F]ind current [W]ord' })
       vim.keymap.set(
         'n',
         '<leader>fm',
-        require('telescope').extensions.notify.notify,
+        telescope.extensions.notify.notify,
         { desc = '[F]ind [M]essages (Notifications)' }
       )
       vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = '[F]ind by [G]rep' })

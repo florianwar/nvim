@@ -31,14 +31,6 @@ M.center = function(str, targetWidth)
   return table.concat(result, '\n')
 end
 
-M.padding2 = function(str, len)
-  if str == nil or str == '' then
-    return ''
-  end
-  local pad = (len - vim.fn.strdisplaywidth(str)) / 2
-  return string.rep(' ', math.ceil(pad)) .. str .. string.rep(' ', math.floor(pad))
-end
-
 M.art = {
   neovim = function()
     return [[
@@ -60,9 +52,7 @@ lllllllc        ,loooooool,:ol
     ]]
   end,
   fish = function()
-    return [[
-<°)))><
-    ]]
+    return '<°)))><'
   end,
   shark = function()
     return [[

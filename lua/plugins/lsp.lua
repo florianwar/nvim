@@ -17,15 +17,20 @@ return {
             vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
-          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+          local telescope = require('telescope.builtin')
+
+          map('gd', telescope.lsp_definitions, '[G]oto [D]efinition')
+          map('gr', telescope.lsp_references, '[G]oto [R]eferences')
+          map('<leader>D', telescope.lsp_type_definitions, 'Type [D]efinition')
+
+          map('<leader>fs', telescope.lsp_document_symbols, 'Document [S]ymbols')
+          map('<leader>fS', telescope.lsp_dynamic_workspace_symbols, 'Workspace [S]ymbols')
+
           map('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename (Symbol)')
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
-          map('gK', vim.lsp.buf.signature_help, 'Signature Help')
+          map('<c-k>', vim.lsp.buf.signature_help, 'Signature Help')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
 
@@ -48,34 +53,35 @@ return {
           end
 
           -- Toggle InlayHints
-          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+          if client and client.server_capabilities.inlayHintProvider then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
             end, '[T]oggle Inlay [H]ints')
           end
 
           -- Diagnostics
-          if client and client.server_capabilities.diagnosticProvider and vim.diagnostic then
-            print('Setting up LSP Diagnostics')
-            vim.diagnostic.config({
-              signs = {
-                text = {
-                  [vim.diagnostic.severity.HINT] = ' ',
-                  [vim.diagnostic.severity.INFO] = ' ',
-                  [vim.diagnostic.severity.WARN] = ' ',
-                  [vim.diagnostic.severity.ERROR] = ' ',
-                },
+          vim.diagnostic.config({
+            signs = {
+              text = {
+                [vim.diagnostic.severity.HINT] = ' ',
+                [vim.diagnostic.severity.INFO] = ' ',
+                [vim.diagnostic.severity.WARN] = ' ',
+                [vim.diagnostic.severity.ERROR] = ' ',
               },
-              float = {
-                show_header = true,
-                source = 'always',
-                border = 'rounded',
-                max_width = 120,
-                max_height = 40,
-                focusable = true,
+              numhl = {
+                [vim.diagnostic.severity.WARN] = 'DiagnosticWarn',
+                [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
               },
-            })
-          end
+            },
+            float = {
+              show_header = true,
+              source = 'always',
+              border = 'rounded',
+              max_width = 120,
+              max_height = 40,
+              focusable = true,
+            },
+          })
         end,
       })
 
@@ -128,9 +134,6 @@ return {
           },
         },
         lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
           settings = {
             Lua = {
               completion = {

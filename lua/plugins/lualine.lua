@@ -1,12 +1,8 @@
-local function show_macro_recording()
-  local recording_register = vim.fn.reg_recording()
-  if recording_register == '' then
-    return ''
-  else
-    return 'Recording @' .. recording_register
-  end
-end
 local current_ascii_art = ''
+local timer = vim.uv.new_timer()
+timer:start(0, 20 * 1000, function()
+  current_ascii_art = require('plugins.dev.ascii').singleLine()
+end)
 
 return {
   {
@@ -48,22 +44,30 @@ return {
               },
             },
             { 'filetype', icon_only = true, separator = '', padding = { left = 1, right = 0 } },
-            function()
-              if os.time() % 13 == 0 then
-                current_ascii_art = require('plugins.dev.ascii').singleLine()
-              end
-              return current_ascii_art
-            end,
+            { '%=', separator = '' },
+            -- Ascii art
+            {
+              function()
+                return current_ascii_art
+              end,
+              color = function()
+                return { fg = require('catppuccin.palettes').get_palette().rosewater }
+              end,
+            },
           },
           lualine_x = {
-            function()
-              local statusline = require('arrow.statusline')
-              -- statusline.is_on_arrow_file() -- return nil if current file is not on arrow.  Return the index if it is.
-              -- statusline.text_for_statusline() -- return the text to be shown in the statusline (the index if is on arrow or "" if not)
-              return statusline.text_for_statusline_with_icons() -- Same, but with an bow and arrow icon ;D
-            end,
-
-            show_macro_recording,
+            -- Show macro recording status
+            {
+              function()
+                local recording_register = vim.fn.reg_recording()
+                if recording_register == '' then
+                  return ''
+                else
+                  return 'Recording @' .. recording_register
+                end
+              end,
+              color = 'WarningMsg',
+            },
             {
               'diff',
               symbols = {
@@ -86,6 +90,19 @@ return {
           lualine_y = {
             { 'progress', separator = ' ', padding = { left = 1, right = 0 } },
             { 'location', padding = { left = 0, right = 1 } },
+            {
+              -- Display current selection dimensions in visual mode
+              function()
+                local starts = vim.fn.line('v')
+                local ends = vim.fn.line('.')
+                local count = starts <= ends and ends - starts + 1 or starts - ends + 1
+                local wc = vim.fn.wordcount()
+                return count .. ':' .. wc['visual_chars']
+              end,
+              cond = function()
+                return vim.fn.mode():find('[Vv]') ~= nil
+              end,
+            },
           },
           lualine_z = {
             function()

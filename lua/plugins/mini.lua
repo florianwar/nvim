@@ -21,28 +21,42 @@ return {
   },
   {
     'echasnovski/mini.starter',
+    event = 'VimEnter',
     opts = function()
+      local starter = require('mini.starter')
       local ascii = require('plugins.dev.ascii')
-      local width = 75
-      local logo = {
+
+      local width = 70
+      local header = {
         ascii.center(ascii.art.shark(), width),
       }
+      local footer = {
+        ascii.center(ascii.art.fish(), width),
+        ascii.center('I use vim btw\n', width),
+      }
 
-      local octo = require('plugins.dev.octo')
-      octo.setup()
+      local palette = require('catppuccin.palettes').get_palette()
+      vim.api.nvim_set_hl(0, 'MiniStarterHeader', { fg = palette.sky, bold = true })
+      vim.api.nvim_set_hl(0, 'MiniStarterFooter', { fg = palette.mauve, bold = true })
 
+      local menu_padding = string.rep(' ', 21)
+      local section = menu_padding .. 'Commands:'
       return {
         evaluate_single = true,
-        header = table.concat(logo, '\n'),
+        header = table.concat(header, '\n'),
         items = {
-          { name = 'Resume last session', action = 'lua require("persistence").load()', section = 'Commands' },
-          { name = 'Find file', action = 'Telescope find_files', section = 'Commands' },
-          { name = 'Grep text', action = 'Telescope live_grep', section = 'Commands' },
-          { name = 'New File', action = 'ene | startinsert', section = 'Commands' },
-          { name = 'Lazy', action = 'Lazy', section = 'Commands' },
-          { name = 'Quit', action = 'qa', section = 'Commands' },
+          { name = 'Resume last session', action = 'lua require("persistence").load()', section = section },
+          { name = 'Find file', action = 'Telescope find_files', section = section },
+          { name = 'Grep text', action = 'Telescope live_grep', section = section },
+          { name = 'New File', action = 'ene | startinsert', section = section },
+          { name = 'Lazy', action = 'Lazy', section = section },
+          { name = 'Quit', action = 'qa', section = section },
         },
-        footer = ascii.center(ascii.singleLine(), width),
+        content_hooks = {
+          starter.gen_hook.adding_bullet(menu_padding .. '\u{f18ba}  ', false),
+          starter.gen_hook.aligning('center', 'center'),
+        },
+        footer = table.concat(footer, '\n'),
       }
     end,
   },
