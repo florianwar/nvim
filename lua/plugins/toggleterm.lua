@@ -3,7 +3,7 @@ return {
     'akinsho/toggleterm.nvim',
     version = '*',
     keys = {
-      { '<leader>tt', '<esc>:ToggleTerm<cr>', mode = { 'n', 'i' }, desc = '[T]oggle [T]erminal' },
+      { '<leader>tt', '<esc>:ToggleTerm<cr>', mode = { 'n' }, desc = '[T]oggle [T]erminal' },
       { '<leader>tt', '<C-\\><C-n>:ToggleTerm<cr>', mode = { 't' }, desc = '[T]oggle [T]erminal' },
     },
     config = function()

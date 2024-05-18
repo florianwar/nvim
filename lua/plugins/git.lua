@@ -1,31 +1,41 @@
 return {
   {
-    {
-      'kdheepak/lazygit.nvim',
-      cmd = {
-        'LazyGit',
-        'LazyGitConfig',
-        'LazyGitCurrentFile',
-        'LazyGitFilter',
-        'LazyGitFilterCurrentFile',
-      },
-      dependencies = {
-        'nvim-lua/plenary.nvim',
-      },
-      keys = {
-        { '<leader>gg', '<cmd>LazyGit<cr>', desc = '[G]it Lazy[G]it' },
-      },
+    'kdheepak/lazygit.nvim',
+    cmd = {
+      'LazyGit',
+      'LazyGitConfig',
+      'LazyGitCurrentFile',
+      'LazyGitFilter',
+      'LazyGitFilterCurrentFile',
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    keys = {
+      { '<leader>gg', '<cmd>LazyGit<cr>', desc = '[G]it Lazy[G]it' },
     },
   },
   {
     'lewis6991/gitsigns.nvim',
-    -- keys = {
-    --   '<leader>tb',
-    --   function()
-    --     require('gitsigns').toggle_current_line_blame()
-    --   end,
-    --   desc = '[T]oggle [B]lame',
-    -- },
+    event = 'BufRead',
+    keys = function()
+      local plugin = require('gitsigns')
+      return {
+        {
+          '<leader>tb',
+          function()
+            plugin.toggle_current_line_blame()
+          end,
+          desc = '[T]oggle Git [B]lame (inline)',
+        },
+        {
+          '<leader>gb',
+          function()
+            plugin.blame_line({ full = true })
+          end,
+        },
+      }
+    end,
     opts = {
       signs = {
         add = { text = '┃' },
@@ -44,7 +54,7 @@ return {
       },
       auto_attach = true,
       attach_to_untracked = false,
-      current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+      current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
       current_line_blame_opts = {
         virt_text = true,
         virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
@@ -58,11 +68,11 @@ return {
       },
       sign_priority = 6,
       update_debounce = 100,
-      status_formatter = nil, -- Use default
+      stjjjatus_formatter = nil, -- Use default
       max_file_length = 40000, -- Disable if file is longer than this (in lines)
       preview_config = {
         -- Options passed to nvim_open_win
-        border = 'single',
+        border = 'rounded',
         style = 'minimal',
         relative = 'cursor',
         row = 0,

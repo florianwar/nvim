@@ -93,6 +93,8 @@ return {
             end,
           },
         },
+        winbar = {},
+        tabline = {},
         extensions = { 'neo-tree', 'lazy' },
       }
     end,
