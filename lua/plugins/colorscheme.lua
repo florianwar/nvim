@@ -1,0 +1,43 @@
+return {
+  {
+    'catppuccin/nvim',
+    lazy = false,
+    priority = 1000,
+    name = 'catppuccin',
+    opts = {
+      flavour = 'macchiato',
+      transparent_background = true,
+      no_italic = false,
+      no_bold = false,
+      no_underline = false,
+      integrations = {
+        cmp = true,
+        flash = true,
+        gitsigns = true,
+        harpoon = true,
+        leap = true,
+        lsp_saga = true,
+        lsp_trouble = true,
+        mason = true,
+        mini = true,
+        native_lsp = {
+          enabled = true,
+          underlines = {
+            errors = { 'undercurl' },
+            hints = { 'undercurl' },
+            warnings = { 'undercurl' },
+            information = { 'undercurl' },
+          },
+        },
+        noice = true,
+        notify = true,
+        neotree = true,
+        semantic_tokens = true,
+        telescope = true,
+        treesitter = true,
+        rainbow_delimiters = true,
+        which_key = true,
+      },
+    },
+  },
+}
