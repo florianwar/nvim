@@ -24,7 +24,7 @@ return {
     event = 'VimEnter',
     opts = function()
       local starter = require('mini.starter')
-      local ascii = require('plugins.dev.ascii')
+      local ascii = require('dev.ascii')
 
       local width = 80
       local header = {

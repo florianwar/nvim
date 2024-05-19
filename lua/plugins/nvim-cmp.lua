@@ -56,14 +56,12 @@ return {
           ['<C-p>'] = cmp.mapping.select_prev_item(),
           ['<C-k>'] = cmp.mapping.select_prev_item(),
 
-          -- Scroll the documentation window [b]ack / [f]orward
           ['<C-d>'] = cmp.mapping.scroll_docs(-4),
           ['<C-u>'] = cmp.mapping.scroll_docs(4),
 
           ['<C-y>'] = cmp.mapping.confirm({ select = true }),
           ['<C-CR>'] = cmp.mapping.confirm({ select = true }),
 
-          --
           ['<C-Space>'] = cmp.mapping.complete({}),
 
           ['<C-l>'] = cmp.mapping(function()

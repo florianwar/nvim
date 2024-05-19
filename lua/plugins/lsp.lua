@@ -32,8 +32,8 @@ return {
           map('<leader>fs', telescope.lsp_document_symbols, 'Document [S]ymbols')
           map('<leader>fS', telescope.lsp_dynamic_workspace_symbols, 'Workspace [S]ymbols')
 
-          map('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename (Symbol)')
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+          map('<leader>cr', vim.lsp.buf.rename, '[R]ename (Symbol)')
+          map('<leader>ca', vim.lsp.buf.code_action, '[A]ction')
 
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
           map('<leader>k', vim.lsp.buf.signature_help, 'Signature Help')
@@ -179,12 +179,12 @@ return {
           })
         end,
         mode = { 'n', 'v' },
-        desc = '[C]ode [F]ormat file or range',
+        desc = '[F]ormat file or range',
       },
     },
     opts = {
       format_on_save = function(bufnr)
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, yaml = true, markdown = true }
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
@@ -215,9 +215,9 @@ return {
     event = 'BufReadPost',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     keys = {
-      { '<leader>cio', '<cmd>TSToolsOrganizeImports<cr>', desc = '[C]ode [I]mports [O]rganize' },
-      { '<leader>cia', '<cmd>TSToolsAddMissingImports<cr>', desc = '[C]ode [I]mports [A]dd missing' },
-      { '<leader>cf', '<cmd>TSToolsFixAll<cr>', desc = '[C]ode [F]ix All' },
+      { '<leader>cio', '<cmd>TSToolsOrganizeImports<cr>', desc = '[I]mports [O]rganize' },
+      { '<leader>cia', '<cmd>TSToolsAddMissingImports<cr>', desc = '[I]mports [A]dd missing' },
+      { '<leader>cf', '<cmd>TSToolsFixAll<cr>', desc = '[F]ix All' },
     },
     opts = {
       settings = {
@@ -260,7 +260,7 @@ return {
         function()
           require('tsc').run()
         end,
-        desc = '[C]ode [C]ompile Typescript',
+        desc = '[C]ompile Typescript',
       },
     },
     opts = {
@@ -304,9 +304,18 @@ return {
   {
     'OlegGulevskyy/better-ts-errors.nvim',
     dependencies = { 'MunifTanjim/nui.nvim' },
-    config = {
+    keys = {
+      {
+        '<leader>ce',
+        function()
+          require('better-ts-errors').toggle()
+        end,
+        desc = 'Typescript [E]rror',
+      },
+    },
+    opts = {
       keymaps = {
-        toggle = '<leader>ce',
+        toggle = nil,
       },
     },
   },

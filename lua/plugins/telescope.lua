@@ -15,22 +15,40 @@ return {
     },
     config = function()
       local telescope = require('telescope')
+
+      local path_display = function(_, path)
+        local filename = require('telescope.utils').path_tail(path)
+        local location = require('plenary.strings').truncate(path, #path - #filename, '')
+        local pathToDisplay = require('telescope.utils').transform_path({ path_display = { 'truncate' } }, location)
+        path = string.format('%s %s ', filename, pathToDisplay)
+
+        local highlights = {
+          { { 0, #filename }, 'Field' },
+          { { #filename, #path }, 'Comment' },
+        }
+
+        return path, highlights
+      end
+
+      local lsp_picker = function(type)
+        return {
+          initial_mode = 'normal',
+          sorting_strategy = 'ascending',
+          layout_strategy = 'vertical',
+          results_title = type or 'Results',
+          prompt_title = false,
+          layout_config = {
+            width = 0.9,
+            height = 0.9,
+            prompt_position = 'top',
+            mirror = true,
+          },
+        }
+      end
+
       telescope.setup({
         defaults = {
-          path_display = function(_, path)
-            local filename = require('telescope.utils').path_tail(path)
-            local location = require('plenary.strings').truncate(path, #path - #filename, '')
-            local pathToDisplay = require('telescope.utils').transform_path({ path_display = { 'truncate' } }, location)
-            path = string.format('%s %s ', filename, pathToDisplay)
-
-            local highlights = {
-              { { 0, #filename }, 'Field' },
-              { { #filename, #path }, 'Comment' },
-            }
-
-            return path, highlights
-          end,
-
+          path_display = path_display,
           mappings = {
             i = {
               ['<esc>'] = require('telescope.actions').close,
@@ -45,30 +63,9 @@ return {
           find_files = {
             hidden = true,
           },
-          lsp_definitions = {
-            initial_mode = 'normal',
-            sorting_strategy = 'ascending',
-            layout_strategy = 'vertical',
-            results_title = false,
-            layout_config = {
-              width = 0.8,
-              height = 0.8,
-              prompt_position = 'top',
-              mirror = true,
-            },
-          },
-          lsp_references = {
-            initial_mode = 'normal',
-            sorting_strategy = 'ascending',
-            layout_strategy = 'vertical',
-            results_title = false,
-            layout_config = {
-              width = 0.8,
-              height = 0.8,
-              prompt_position = 'top',
-              mirror = true,
-            },
-          },
+          lsp_definitions = lsp_picker('Definitions'),
+          lsp_references = lsp_picker('References'),
+          lsp_type_definitions = lsp_picker('Type Definitions'),
         },
         extensions = {
           ['ui-select'] = {

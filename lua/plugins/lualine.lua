@@ -30,7 +30,7 @@ return {
             { '%=', separator = '' },
             -- Ascii art
             {
-              require('plugins.dev.ascii').random_single_line_every(10),
+              require('dev.ascii').random_single_line_every(10),
               color = function()
                 return { fg = require('catppuccin.palettes').get_palette().rosewater }
               end,
