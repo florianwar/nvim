@@ -14,14 +14,20 @@ return {
         group = vim.api.nvim_create_augroup('my-lsp-attach', { clear = true }),
         callback = function(event)
           local map = function(keys, func, desc)
-            vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+            vim.keymap.set('n', keys, func, { buffer = event.buf, desc = desc })
           end
 
           local telescope = require('telescope.builtin')
 
-          map('gd', telescope.lsp_definitions, '[G]oto [D]efinition')
-          map('gr', telescope.lsp_references, '[G]oto [R]eferences')
-          map('gD', telescope.lsp_type_definitions, '[G]oto Type [D]efinition')
+          map('gd', function()
+            telescope.lsp_definitions({ jump_type = 'never' })
+          end, '[G]oto [D]efinition')
+          map('gr', function()
+            telescope.lsp_references({ jump_type = 'never' })
+          end, '[G]oto [R]eferences')
+          map('gD', function()
+            telescope.lsp_type_definitions({ jump_type = 'never' })
+          end, '[G]oto Type [D]efinition')
 
           map('<leader>fs', telescope.lsp_document_symbols, 'Document [S]ymbols')
           map('<leader>fS', telescope.lsp_dynamic_workspace_symbols, 'Workspace [S]ymbols')
@@ -30,7 +36,7 @@ return {
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
-          map('<leader>k>', vim.lsp.buf.signature_help, 'Signature Help')
+          map('<leader>k', vim.lsp.buf.signature_help, 'Signature Help')
 
           -- diagnostics
           map('<leader>cd', vim.diagnostic.open_float, '[D]iagnostic')
