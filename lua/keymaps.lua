@@ -5,7 +5,6 @@ map('n', 'U', '<C-r>', { desc = 'Redo', noremap = true })
 
 -- use jk/kj to escape
 map({ 'i', 'c' }, 'jk', '<ESC>')
-map({ 'i', 'c' }, 'kj', '<ESC>')
 
 -- Move to window using the <ctrl> hjkl keys -> Handled by Kitty-navigator
 -- map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window" })
@@ -78,8 +77,10 @@ map('v', '>', '>gv')
 --Replace highlighted text
 map('v', 'r', '"hy:%s/<C-r>h//g<left><left>')
 
--- save file
-map({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = '[S]ave File' })
-
+-- Execute macro over visual region.
+map('x', '@', function()
+  return ':norm @' .. vim.fn.getcharstr() .. '<cr>'
+end, { expr = true })
+map({ 'n', 'i' }, '<c-s>', '<cmd>w<cr><esc>', { desc = '[S]ave File' })
 -- exit with leader-q
 map('n', '<leader>q', '<cmd>qa<cr>', { desc = '[Q]uit' })

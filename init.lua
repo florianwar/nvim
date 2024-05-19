@@ -9,7 +9,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     lazypath,
   })
 end
-vim.opt.rtp:prepend(lazypath)
+vim.opt.rtp = vim.opt.rtp ^ lazypath
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -25,6 +25,7 @@ require('lazy').setup('plugins', {
     notify = false,
   },
   ui = {
+    border = 'rounded',
     icons = {
       cmd = '⌘',
       config = '🛠',
@@ -43,7 +44,7 @@ require('lazy').setup('plugins', {
   },
 })
 
-require('config.autocommands')
-require('config.globals')
-require('config.keymaps')
-require('config.options')
+require('autocommands')
+require('globals')
+require('keymaps')
+require('options')
