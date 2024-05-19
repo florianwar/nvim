@@ -73,7 +73,20 @@ lllllllc        ,loooooool,:ol
       ]]
   end,
 }
-M.singleLine = function()
+M.random_single_line_every = function(seconds)
+  local current_ascii_art = ''
+
+  local timer = vim.uv.new_timer()
+  timer:start(0, seconds * 1000, function()
+    current_ascii_art = M.single_line()
+  end)
+
+  return function()
+    return current_ascii_art
+  end
+end
+
+M.single_line = function()
   local lib = {
     '¯\\_(ツ)_/¯',
     'ᕙ(⇀‸↼‶)ᕗ',

@@ -1,9 +1,3 @@
-local current_ascii_art = ''
-local timer = vim.uv.new_timer()
-timer:start(0, 20 * 1000, function()
-  current_ascii_art = require('plugins.dev.ascii').singleLine()
-end)
-
 return {
   {
     'nvim-lualine/lualine.nvim',
@@ -36,31 +30,29 @@ return {
             { '%=', separator = '' },
             -- Ascii art
             {
-              function()
-                return current_ascii_art
-              end,
+              require('plugins.dev.ascii').random_single_line_every(10),
               color = function()
                 return { fg = require('catppuccin.palettes').get_palette().rosewater }
               end,
             },
           },
-          lualine_x = {
-            -- Show macro recording status
+          lualine_x = {},
+          lualine_y = {
             {
+              -- Show macro recording status
               function()
                 local recording_register = vim.fn.reg_recording()
                 if recording_register == '' then
                   return ''
                 else
-                  return 'Recording @' .. recording_register
+                  return 'recording @' .. recording_register
                 end
               end,
-              color = 'WarningMsg',
+              color = '@comment.warning',
+              padding = { left = 1, right = 1 },
             },
-          },
-          lualine_y = {
-            { 'progress', separator = ' ', padding = { left = 1, right = 0 } },
-            { 'location', padding = { left = 0, right = 1 } },
+            { 'progress', separator = { left = '', right = ' ' }, padding = { left = 1, right = 0 } },
+            { 'location', padding = { left = 1, right = 1 } },
             {
               -- Display current selection dimensions in visual mode
               function()
