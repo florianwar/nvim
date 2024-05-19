@@ -33,17 +33,6 @@ return {
           lualine_b = { 'branch' },
 
           lualine_c = {
-            { 'filename', path = 4 },
-            {
-              'diagnostics',
-              symbols = {
-                error = ' ',
-                warn = ' ',
-                info = ' ',
-                hint = ' ',
-              },
-            },
-            { 'filetype', icon_only = true, separator = '', padding = { left = 1, right = 0 } },
             { '%=', separator = '' },
             -- Ascii art
             {
@@ -67,24 +56,6 @@ return {
                 end
               end,
               color = 'WarningMsg',
-            },
-            {
-              'diff',
-              symbols = {
-                added = ' ',
-                modified = ' ',
-                removed = ' ',
-              },
-              source = function()
-                local gitsigns = vim.b.gitsigns_status_dict
-                if gitsigns then
-                  return {
-                    added = gitsigns.added,
-                    modified = gitsigns.changed,
-                    removed = gitsigns.removed,
-                  }
-                end
-              end,
             },
           },
           lualine_y = {

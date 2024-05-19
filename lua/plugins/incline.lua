@@ -2,6 +2,7 @@ return {
   {
     'b0o/incline.nvim',
     depends = { 'kyazdani42/nvim-web-devicons' },
+    event = 'VeryLazy',
     config = function()
       local devicons = require('nvim-web-devicons')
       require('incline').setup({
@@ -35,7 +36,7 @@ return {
           end
 
           local function get_diagnostic_label()
-            local icons = { error = '', warn = '', info = '', hint = '' }
+            local icons = { error = ' ', warn = ' ', info = ' ', hint = '' }
             local label = {}
 
             for severity, icon in pairs(icons) do
@@ -62,6 +63,5 @@ return {
         end,
       })
     end,
-    event = 'VeryLazy',
   },
 }
