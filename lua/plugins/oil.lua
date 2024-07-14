@@ -7,8 +7,8 @@ return {
         ['q'] = { callback = 'actions.close', mode = 'n' },
         ['g?'] = 'actions.show_help',
         -- lets see how this impacts renaming
-        ['h'] = { callback = 'actions.parent', mode = 'n' },
-        ['l'] = { callback = 'actions.select', mode = 'n' },
+        -- ['h'] = { callback = 'actions.parent', mode = 'n' },
+        -- ['l'] = { callback = 'actions.select', mode = 'n' },
         ['s'] = { callback = 'actions.select_vsplit', mode = 'n' },
         ['<CR>'] = 'actions.select',
         ['<C-p>'] = 'actions.preview',

@@ -15,6 +15,18 @@ return {
     cmd = { 'TSUpdateSync', 'TSUpdate', 'TSInstall' },
     keys = {
       { '<c-space>', desc = 'Increment Selection' },
+      { ']f', desc = 'Move to next [F]unction start' },
+      { ']b', desc = 'Move to next [B]lock start' },
+      { ']C', DESC = 'Move to next [C]lass start' },
+      { ']B', desc = 'Move to next [B]lock end' },
+      { ']F', desc = 'Move to next [F]unction end' },
+      { ']C', desc = 'Move to next [C]lass end' },
+      { '[f', desc = 'Move to previous [F]unction start' },
+      { '[b', desc = 'Move to previous [B]lock start' },
+      { '[c', desc = 'Move to previous [c]lass start' },
+      { '[B', desc = 'Move to previous [B]lock end' },
+      { '[F', desc = 'Move to previous [F]unction end' },
+      { '[C', desc = 'Move to previous [C]lass end' },
       { '<bs>', desc = 'Decrement Selection', mode = 'x' },
     },
     ---@type TSConfig
@@ -64,18 +76,22 @@ return {
           enable = true,
           goto_next_start = {
             [']f'] = '@function.outer',
+            [']b'] = '@block.outer',
             [']c'] = '@class.outer',
           },
           goto_next_end = {
             [']F'] = '@function.outer',
+            [']B'] = '@block.outer',
             [']C'] = '@class.outer',
           },
           goto_previous_start = {
             ['[f'] = '@function.outer',
+            ['[b'] = '@block.outer',
             ['[c'] = '@class.outer',
           },
           goto_previous_end = {
             ['[F'] = '@function.outer',
+            ['[B'] = '@block.outer',
             ['[C'] = '@class.outer',
           },
         },

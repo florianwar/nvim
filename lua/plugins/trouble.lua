@@ -1,7 +1,6 @@
 return {
   {
     'folke/trouble.nvim',
-    branch = 'dev', -- Use trouble v3
     keys = {
       {
         '<leader>xx',

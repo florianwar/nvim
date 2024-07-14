@@ -41,6 +41,7 @@ return {
             width = 0.9,
             height = 0.9,
             prompt_position = 'top',
+            preview_height = 0.75,
             mirror = true,
           },
         }
@@ -85,6 +86,7 @@ return {
       vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = '[F]ind [K]eymaps' })
       vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = '[F]ind [B]uffers' })
       vim.keymap.set('n', '<leader>ft', builtin.builtin, { desc = '[F]ind [T]elescope builtins' })
+      vim.keymap.set('n', '<leader>fe', '<cmd>Telescope emoji<cr>', { desc = '[F]ind [E]moji' })
       vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = '[F]ind current [W]ord' })
       vim.keymap.set(
         'n',

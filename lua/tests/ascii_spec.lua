@@ -1,4 +1,4 @@
-local ascii = require('plugins.dev.ascii')
+local ascii = require('dev.ascii')
 local eq = assert.are.same
 
 describe('ascii.padding', function()

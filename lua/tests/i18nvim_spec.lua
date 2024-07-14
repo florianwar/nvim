@@ -1,0 +1,17 @@
+require('globals')
+
+describe('i18nvim', function()
+  it('should find .i18nvim.json', function()
+    local i18nvim = require('dev.i18nvim')
+    local config_file = i18nvim.config_file_path()
+    assert.is_string(config_file)
+  end)
+  it('should load .i18nvim.json', function()
+    local i18nvim = require('dev.i18nvim')
+    local config = i18nvim.load_config()
+
+    P(config)
+    assert.is_table(config)
+    assert.is_equal(config.foo, 'bar')
+  end)
+end)

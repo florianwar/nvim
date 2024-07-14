@@ -3,7 +3,7 @@ return {
     'jiaoshijie/undotree',
     dependencies = 'nvim-lua/plenary.nvim',
     lazy = true,
-    config = {
+    opts = {
       window = {
         winblend = 10,
       },
