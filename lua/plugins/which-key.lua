@@ -6,15 +6,15 @@ return {
       local which_key = require('which-key')
       which_key.setup()
 
-      which_key.register({
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>f'] = { name = '[F]find', _ = 'which_key_ignore' },
-        ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-        ['<leader>x'] = { name = 'Diagnosti[X]', _ = 'which_key_ignore' },
+      which_key.add({
+        { '<leader>c', group = '[C]ode' },
+        { '<leader>d', group = '[D]ocument' },
+        { '<leader>f', group = '[F]find' },
+        { '<leader>g', group = '[G]it' },
+        { '<leader>r', group = '[R]ename' },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>w', group = '[W]orkspace' },
+        { '<leader>x', group = 'Diagnosti[X]' },
       })
     end,
   },

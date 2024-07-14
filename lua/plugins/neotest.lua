@@ -24,8 +24,8 @@ return {
       }
     end,
     keys = function()
-      require('which-key').register({
-        ['<leader>n'] = { name = '[N]eotest', _ = 'which_key_ignore' },
+      require('which-key').add({
+        { '<leader>n', name = '[N]eotest' },
       })
 
       return {

@@ -9,8 +9,8 @@ return {
       local obsidian = require('obsidian')
       local which_key = require('which-key')
 
-      which_key.register({
-        ['<leader>o'] = { name = '[O]bsidian', _ = 'which_key_ignore' },
+      which_key.add({
+        { '<leader>o', group = '[O]bsidian' },
       })
 
       return {
