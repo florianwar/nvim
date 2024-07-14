@@ -8,6 +8,7 @@ return {
       'hrsh7th/cmp-nvim-lsp',
       { 'j-hui/fidget.nvim', opts = { notification = { window = { winblend = 0 } } } },
       { 'folke/neodev.nvim', opts = {} },
+      { 'yioneko/nvim-vtsls' },
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -20,13 +21,13 @@ return {
           local telescope = require('telescope.builtin')
 
           map('gd', function()
-            telescope.lsp_definitions({ jump_type = 'never' })
+            telescope.lsp_definitions() --{ jump_type = 'never' })
           end, '[G]oto [D]efinition')
           map('gr', function()
             telescope.lsp_references({ jump_type = 'never' })
           end, '[G]oto [R]eferences')
           map('gD', function()
-            telescope.lsp_type_definitions({ jump_type = 'never' })
+            telescope.lsp_type_definitions() --{ jump_type = 'never' })
           end, '[G]oto Type [D]efinition')
 
           map('<leader>fs', telescope.lsp_document_symbols, 'Document [S]ymbols')
@@ -51,28 +52,10 @@ return {
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-          -- Highlight References under cursor
-          if client and client.server_capabilities.documentHighlightProvider then
-            local highlight_augroup = vim.api.nvim_create_augroup('my-lsp-highlight', { clear = false })
-            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-              desc = 'Highlight LSP references on cursor hold',
-              buffer = event.buf,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.document_highlight,
-            })
-
-            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-              desc = 'Clear LSP references highlight on cursor move',
-              buffer = event.buf,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.clear_references,
-            })
-          end
-
           -- Toggle InlayHints
           if client and client.server_capabilities.inlayHintProvider then
             map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
             end, '[T]oggle Inlay [H]ints')
           end
 
@@ -102,14 +85,6 @@ return {
         end,
       })
 
-      vim.api.nvim_create_autocmd('LspDetach', {
-        group = vim.api.nvim_create_augroup('my-lsp-detach', { clear = true }),
-        callback = function(event)
-          vim.lsp.buf.clear_references()
-          vim.api.nvim_clear_autocmds({ group = 'my-lsp-highlight', buffer = event.buf })
-        end,
-      })
-
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP specification.
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
@@ -119,7 +94,37 @@ return {
 
       local servers = {
         angularls = {},
-        tsserver = {}, -- configured below with typescript-tools
+        vtsls = {
+          -- see: https://github.com/yioneko/vtsls/blob/main/packages/service/configuration.schema.json
+          settings = {
+            vtsls = {
+              autoUseWorkspaceTsdk = true,
+              tsserver = {
+                globalPlugins = {
+                  {
+                    name = '@angular/language-server',
+                    location = require('mason-registry').get_package('angular-language-server'):get_install_path()
+                      .. '/node_modules/@angular/language-server',
+                    enableForWorkspaceTypeScriptVersions = false,
+                  },
+                },
+              },
+            },
+            typescript = {
+              suggest = {
+                completeFunctionCalls = true,
+              },
+              inlayHints = {
+                parameterNames = { enabled = 'literals' },
+                parameterTypes = { enabled = true },
+                ariableTypes = { enabled = false },
+                propertyDeclarationTypes = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                enumMemberValues = { enabled = true },
+              },
+            },
+          },
+        },
         lua_ls = {
           settings = {
             Lua = {
@@ -149,15 +154,17 @@ return {
         ensure_installed = ensure_installed,
       })
 
+      require('lspconfig.configs').vtsls = require('vtsls').lspconfig
+
       require('mason-lspconfig').setup({
         handlers = {
           function(server_name)
-            -- configured below with typescript-tools
-            if server_name == 'tsserver' then
-              return
-            end
             local server = servers[server_name] or {}
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            --HACK: disable rename for angularls due duplicate with ts
+            if server_name == 'angularls' then
+              server.capabilities.renameProvider = false
+            end
             require('lspconfig')[server_name].setup(server)
           end,
         },
@@ -170,7 +177,7 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     keys = {
       {
-        '<leader>cf',
+        '<leader>cff',
         function()
           require('conform').format({
             lsp_fallback = true,
@@ -179,12 +186,12 @@ return {
           })
         end,
         mode = { 'n', 'v' },
-        desc = '[F]ormat file or range',
+        desc = '[F]ile or range [F]ormat',
       },
     },
     opts = {
       format_on_save = function(bufnr)
-        local disable_filetypes = { c = true, cpp = true, yaml = true, markdown = true }
+        local disable_filetypes = { c = true, cpp = true, json = true, yaml = true, markdown = true }
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
@@ -209,46 +216,17 @@ return {
       },
     },
   },
-  -- Better Typescript support
+  -- Commands for VSCode LSP
   {
-    'pmizio/typescript-tools.nvim',
-    event = 'BufReadPost',
-    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    'yioneko/nvim-vtsls',
+    event = 'BufReadPre',
     keys = {
-      { '<leader>cio', '<cmd>TSToolsOrganizeImports<cr>', desc = '[I]mports [O]rganize' },
-      { '<leader>cia', '<cmd>TSToolsAddMissingImports<cr>', desc = '[I]mports [A]dd missing' },
-      { '<leader>cf', '<cmd>TSToolsFixAll<cr>', desc = '[F]ix All' },
-    },
-    opts = {
-      settings = {
-        typescript = {
-          inlayHints = {
-            includeInlayParameterNameHints = 'none',
-            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-            includeInlayFunctionParameterTypeHints = false,
-            includeInlayVariableTypeHints = true,
-            includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayFunctionLikeReturnTypeHints = true,
-            includeInlayEnumMemberValueHints = true,
-          },
-        },
-        javascript = {
-          inlayHints = {
-            includeInlayParameterNameHints = 'none',
-            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-            includeInlayFunctionParameterTypeHints = false,
-            includeInlayVariableTypeHints = true,
-            includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayFunctionLikeReturnTypeHints = false,
-            includeInlayEnumMemberValueHints = true,
-          },
-        },
-      },
-      completions = {
-        completeFunctionCalls = true,
-      },
+      { '<leader>cio', '<cmd>VtsExec organize_imports<cr>', desc = '[I]mports [O]rganize' },
+      { '<leader>cia', '<cmd>VtsExec add_missing_imports<cr>', desc = '[I]mports [A]dd missing' },
+      { '<leader>cf', '<cmd>VtsExec fix_all<cr>', desc = '[F]ix All' },
+      { '<leader>csr', '<cmd>VtsExec restart_tsserver<cr>', desc = '[S]erver [R]estart' },
+      { '<leader>csl', '<cmd>VtsExec open_tsserver_log<cr>', desc = '[S]erver [L]ogs' },
+      { '<leader>cfr', '<cmd>VtsExec file_references<cr>', desc = '[F]ile [R]eferences' },
     },
   },
   -- Check whole project for Typescript errors
@@ -310,7 +288,7 @@ return {
         function()
           require('better-ts-errors').toggle()
         end,
-        desc = 'Typescript [E]rror',
+        desc = 'Typescript [E]rrors',
       },
     },
     opts = {
