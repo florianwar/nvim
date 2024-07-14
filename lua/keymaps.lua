@@ -12,11 +12,16 @@ map({ 'i', 'c' }, 'jk', '<ESC>')
 -- map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window" })
 -- map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window" })
 
+map('n', ']t', '<cmd>tabnext<cr>', { desc = 'Next [T]ab' })
+map('n', '[t', '<cmd>tabprevious<cr>', { desc = 'Previous [T]ab' })
+map('n', ']q', '<cmd>cnext<cr>', { desc = 'Next Quickfix' })
+map('n', '[q', '<cmd>cprevious<cr>', { desc = 'Previous [Q]uickfix' })
+
 -- Resize window using arrow keys
-map('n', '<Up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })
-map('n', '<Down>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height' })
-map('n', '<Left>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease Window Width' })
-map('n', '<Right>', '<cmd>vertical resize +2<cr>', { desc = 'Increase Window Width' })
+map('n', '<Up>', '<cmd>resize +5<cr>', { desc = 'Increase Window Height' })
+map('n', '<Down>', '<cmd>resize -5<cr>', { desc = 'Decrease Window Height' })
+map('n', '<Left>', '<cmd>vertical resize -15<cr>', { desc = 'Decrease Window Width' })
+map('n', '<Right>', '<cmd>vertical resize +15<cr>', { desc = 'Increase Window Width' })
 
 -- Move Lines
 map('i', '<A-k>', '<esc><cmd>m .-2<cr>==gi', { desc = 'Move Up', silent = true })
@@ -32,23 +37,12 @@ map('i', '<A-j>', '<esc><cmd>m .+1<cr>==gi', { desc = 'Move Down', silent = true
 -- map('n', 'n', 'nzzzv', { desc = 'Jump to Next' })
 -- map('n', 'N', 'Nzzzv', { desc = 'Jump to Previous' })
 
--- Remap German keyboard Umlauts to smth more useful
-map({ 'i', 'v', 'n' }, 'ö', '{')
-map({ 'i', 'v', 'n' }, 'Ö', '[')
-map({ 'i', 'v', 'n' }, 'ä', '}')
-map({ 'i', 'v', 'n' }, 'Ä', ']')
-map({ 'i', 'v', 'n' }, 'ü', '\\')
-map({ 'i', 'v', 'n' }, 'ü', '|')
-map('i', '<C-ö>', 'ö', { noremap = true })
-map('i', '<C-S-ö>', 'Ö', { noremap = true })
-map('i', '<C-ä>', 'ä', { noremap = true })
-map('i', '<C-S-ä>', 'Ä', { noremap = true })
-map('i', '<C-ü>', 'ü', { noremap = true })
-map('i', '<C-S-ü>', 'Ü', { noremap = true })
+map('n', '<leader><tab>', '<c-^>', { desc = 'Toggle last Buffers' })
 
 -- clear highlight with escape
 map('n', '<esc>', '<cmd>noh<CR>')
 
+map('n', '<C-w>t', '<C-w>T', { desc = 'Move to new [T]ab' })
 -- black hole delete and change
 map({ 'n', 'x' }, 'c', [["_c]])
 map('n', 'cc', [["_cc]])
@@ -81,6 +75,9 @@ map('v', 'r', '"hy:%s/<C-r>h//g<left><left>')
 map('x', '@', function()
   return ':norm @' .. vim.fn.getcharstr() .. '<cr>'
 end, { expr = true })
+
+-- save with ctrl-s
 map({ 'n', 'i' }, '<c-s>', '<cmd>w<cr><esc>', { desc = '[S]ave File' })
+
 -- exit with leader-q
-map('n', '<leader>q', '<cmd>qa<cr>', { desc = '[Q]uit' })
+map('n', '<leader>q', '<cmd>wqa<cr>', { desc = '[Q]uit' })

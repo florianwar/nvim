@@ -35,9 +35,9 @@ opt.smoothscroll = true
 opt.splitright = true
 opt.splitbelow = true
 
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-vim.opt.conceallevel = 1
+opt.list = true
+opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+opt.conceallevel = 1
 
 opt.undofile = true
 opt.autowrite = true
