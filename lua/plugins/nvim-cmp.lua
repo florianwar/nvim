@@ -44,7 +44,18 @@ return {
         formatting = {
           fields = { 'abbr', 'kind', 'menu' },
           format = lspkind.cmp_format({
-            maxwidth = 120,
+            mode = 'symbol_text',
+            maxwidth = 80,
+            symbol_map = {
+              i18n = '',
+            },
+            menu = {
+              nvim_lsp = '[LSP]',
+              luasnip = '[LuaSnip]',
+              path = '[Path]',
+              i18nvim = '[I18Nvim]',
+              lazydev = '[LazyDev]',
+            },
             ellipsis_char = '...',
           }),
           expandable_indicator = true,
@@ -77,6 +88,11 @@ return {
         }),
         sources = {
           { name = 'nvim_lsp' },
+          {
+            name = 'lazydev',
+            group_index = 0,
+          },
+          { name = 'i18nvim', group_index = 0 },
           { name = 'luasnip' },
           { name = 'path' },
         },

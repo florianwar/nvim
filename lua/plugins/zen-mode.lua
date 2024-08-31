@@ -9,6 +9,7 @@ return {
             enable_with_zen_mode = true,
             keep_cursor_position = true,
             enable_notifications = true,
+            enable_horizontal_scroll = false,
           })
         end,
         opts = {},
@@ -20,7 +21,7 @@ return {
     opts = {
       window = {
         backdrop = 0.8,
-        width = 140,
+        width = 130,
         height = 1,
         options = {
           list = false,

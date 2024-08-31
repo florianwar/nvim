@@ -64,6 +64,9 @@ return {
           find_files = {
             hidden = true,
           },
+          live_grep = {
+            hidden = true,
+          },
           lsp_definitions = lsp_picker('Definitions'),
           lsp_references = lsp_picker('References'),
           lsp_type_definitions = lsp_picker('Type Definitions'),

@@ -62,10 +62,7 @@ return {
         ignore_whitespace = false,
         virt_text_priority = 100,
       },
-      current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
-      current_line_blame_formatter_opts = {
-        relative_time = false,
-      },
+      current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
       sign_priority = 6,
       update_debounce = 100,
       stjjjatus_formatter = nil, -- Use default
@@ -87,7 +84,6 @@ return {
       'lewis6991/gitsigns.nvim',
     },
     opts = {
-
       keymaps = {
         view = {
           -- close mapping & fix noice setting buffer dirty

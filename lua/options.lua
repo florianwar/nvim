@@ -15,7 +15,7 @@ opt.tabstop = 2
 opt.number = true
 opt.relativenumber = true
 opt.showmode = false
-opt.laststatus = 3
+opt.laststatus = 1
 opt.signcolumn = 'yes:1'
 
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
@@ -50,3 +50,11 @@ opt.timeoutlen = 300
 opt.termguicolors = true
 opt.pumblend = 0
 opt.pumheight = 12
+
+opt.formatoptions:remove('o')
+
+vim.filetype.add({
+  pattern = {
+    ['.*%.component%.html'] = 'htmlangular', -- Sets the filetype to `htmlangular` if it matches the pattern
+  },
+})

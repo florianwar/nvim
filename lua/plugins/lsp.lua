@@ -7,7 +7,6 @@ return {
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       'hrsh7th/cmp-nvim-lsp',
       { 'j-hui/fidget.nvim', opts = { notification = { window = { winblend = 0 } } } },
-      { 'folke/neodev.nvim', opts = {} },
       { 'yioneko/nvim-vtsls' },
     },
     config = function()
@@ -29,9 +28,6 @@ return {
           map('gD', function()
             telescope.lsp_type_definitions() --{ jump_type = 'never' })
           end, '[G]oto Type [D]efinition')
-
-          map('<leader>fs', telescope.lsp_document_symbols, 'Document [S]ymbols')
-          map('<leader>fS', telescope.lsp_dynamic_workspace_symbols, 'Workspace [S]ymbols')
 
           map('<leader>cr', vim.lsp.buf.rename, '[R]ename (Symbol)')
           map('<leader>ca', vim.lsp.buf.code_action, '[A]ction')
@@ -73,9 +69,10 @@ return {
                 [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
               },
             },
+            virtual_text = false,
             float = {
               show_header = true,
-              source = 'always',
+              source = true,
               border = 'rounded',
               max_width = 120,
               max_height = 40,
@@ -125,6 +122,13 @@ return {
             },
           },
         },
+        jsonls = {},
+        eslint = {
+          settings = {
+            -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
+            workingDirectories = { mode = 'auto' },
+          },
+        },
         lua_ls = {
           settings = {
             Lua = {
@@ -144,6 +148,8 @@ return {
         'prettierd',
         'prettier',
         --
+        'fixjson', -- json
+        'jq', -- json
         'shellcheck', -- sh
         'beautysh', -- bash
         'yamlfmt', -- yaml
@@ -171,27 +177,32 @@ return {
       })
     end,
   },
+  {
+    'folke/lazydev.nvim',
+    ft = 'lua', -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+      },
+    },
+  },
+  { 'Bilal2453/luvit-meta', lazy = true }, -- optional `vim.uv` typings
   -- Formatting with LSPs
   {
     'stevearc/conform.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
-    keys = {
-      {
-        '<leader>cff',
-        function()
-          require('conform').format({
-            lsp_fallback = true,
-            async = false,
-            timeout_ms = 1000,
-          })
-        end,
-        mode = { 'n', 'v' },
-        desc = '[F]ile or range [F]ormat',
-      },
-    },
     opts = {
       format_on_save = function(bufnr)
-        local disable_filetypes = { c = true, cpp = true, json = true, yaml = true, markdown = true }
+        local disable_filetypes = {
+          c = true,
+          cpp = true,
+          json = false,
+          yaml = true,
+          markdown = true,
+        }
+
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
@@ -199,20 +210,54 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        svelte = { { 'prettierd', 'prettier' } },
-        javascript = { { 'prettierd', 'prettier' } },
-        typescript = { { 'prettierd', 'prettier' } },
-        javascriptreact = { { 'prettierd', 'prettier' } },
-        typescriptreact = { { 'prettierd', 'prettier' } },
-        json = { { 'prettierd', 'prettier' } },
-        graphql = { { 'prettierd', 'prettier' } },
-        markdown = { { 'prettierd', 'prettier' } },
+        svelte = { 'prettierd', 'prettier', stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'fixjson' },
+        graphql = { 'prettierd', 'prettier', stop_after_first = true },
+        markdown = { 'prettierd', 'prettier', stop_after_first = true },
         bash = { 'beautysh' },
         yaml = { 'yamlfmt' },
         toml = { 'taplo' },
-        css = { { 'prettierd', 'prettier' } },
-        scss = { { 'prettierd', 'prettier' } },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        scss = { 'prettierd', 'prettier', stop_after_first = true },
         sh = { { 'shellcheck' } },
+      },
+    },
+  },
+  {
+    'rachartier/tiny-inline-diagnostic.nvim',
+    event = 'VeryLazy',
+    keys = {
+      { '<leader>td', '<cmd>lua require("tiny-inline-diagnostic").toggle()<cr>', desc = '[T]oggle [D]iagnostic' },
+    },
+    opts = {
+      hi = {
+        error = 'DiagnosticError',
+        warn = 'DiagnosticWarn',
+        info = 'DiagnosticInfo',
+        hint = 'DiagnosticHint',
+        arrow = 'NonText',
+        background = 'None', -- Can be a highlight or a hexadecimal color (#RRGGBB)
+        mixing_color = 'None', -- Can be None or a hexadecimal color (#RRGGBB). Used to blend the background color with the diagnostic background color with another color.
+      },
+      options = {
+        show_source = true,
+        softwrap = 70,
+        multiple_diag_under_cursor = true,
+        mutilines = false,
+        overflow = {
+          mode = 'none',
+        },
+        break_line = {
+          enabled = true,
+          after = 75,
+        },
+      },
+      virt_texts = {
+        priority = 10,
       },
     },
   },
@@ -220,14 +265,23 @@ return {
   {
     'yioneko/nvim-vtsls',
     event = 'BufReadPre',
-    keys = {
-      { '<leader>cio', '<cmd>VtsExec organize_imports<cr>', desc = '[I]mports [O]rganize' },
-      { '<leader>cia', '<cmd>VtsExec add_missing_imports<cr>', desc = '[I]mports [A]dd missing' },
-      { '<leader>cf', '<cmd>VtsExec fix_all<cr>', desc = '[F]ix All' },
-      { '<leader>csr', '<cmd>VtsExec restart_tsserver<cr>', desc = '[S]erver [R]estart' },
-      { '<leader>csl', '<cmd>VtsExec open_tsserver_log<cr>', desc = '[S]erver [L]ogs' },
-      { '<leader>cfr', '<cmd>VtsExec file_references<cr>', desc = '[F]ile [R]eferences' },
-    },
+    keys = function()
+      require('which-key').add({
+
+        { '<leader>ci', name = '[I]mports' },
+        { '<leader>cf', name = '[F]ix and [F]ile' },
+        { '<leader>cs', name = '[S]erver' },
+      })
+
+      return {
+        { '<leader>cio', '<cmd>VtsExec organize_imports<cr>', desc = '[O]rganize' },
+        { '<leader>cia', '<cmd>VtsExec add_missing_imports<cr>', desc = '[A]dd missing' },
+        { '<leader>cfa', '<cmd>VtsExec fix_all<cr>', desc = '[F]ix [A]ll' },
+        { '<leader>csr', '<cmd>VtsExec restart_tsserver<cr>', desc = '[S]erver [R]estart' },
+        { '<leader>csl', '<cmd>VtsExec open_tsserver_log<cr>', desc = '[S]erver [L]ogs' },
+        { '<leader>cfr', '<cmd>VtsExec file_references<cr>', desc = '[F]ile [R]eferences' },
+      }
+    end,
   },
   -- Check whole project for Typescript errors
   {
@@ -296,5 +350,15 @@ return {
         toggle = nil,
       },
     },
+  },
+  {
+    '2nthony/sortjson.nvim',
+    cmd = {
+      'SortJSONByAlphaNum',
+      'SortJSONByAlphaNumReverse',
+      'SortJSONByKeyLength',
+      'SortJSONByKeyLengthReverse',
+    },
+    config = true,
   },
 }

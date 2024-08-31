@@ -3,11 +3,11 @@ return {
     'akinsho/toggleterm.nvim',
     version = '*',
     keys = {
-      { '<leader>tt', '<esc>:ToggleTerm<cr>', mode = { 'n' }, desc = '[T]oggle [T]erminal' },
-      { '<leader>tt', '<C-\\><C-n>:ToggleTerm<cr>', mode = { 't' }, desc = '[T]oggle [T]erminal' },
+      { '<C-t>', '<esc>:ToggleTerm<cr>', mode = { 'n' }, desc = '[T]oggle [T]erminal' },
+      { '<C-t>', '<C-\\><C-n>:ToggleTerm<cr>', mode = { 't' }, desc = '[T]oggle [T]erminal' },
     },
     opts = {
-      open_mapping = [[<C-\>]],
+      open_mapping = [[<C-t>]],
       hide_numbers = true,
       shade_terminals = false,
       start_in_insert = true,

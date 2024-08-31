@@ -2,17 +2,18 @@ return {
   { 'echasnovski/mini.ai', opts = {} },
   { 'echasnovski/mini.trailspace', opts = {} },
   { 'echasnovski/mini.comment', opts = {} },
+  { 'echasnovski/mini.icons', opts = {} },
   { 'echasnovski/mini.pairs', opts = {} },
   {
     'echasnovski/mini.surround',
     opts = {
       mappings = {
-        add = 'sa', -- Add surrounding in Normal and Visual modes
-        delete = 'sd', -- Delete surrounding
-        find = 'sf', -- Find surrounding (to the right)
-        find_left = 'sF', -- Find surrounding (to the left)
-        highlight = 'sh', -- Highlight surrounding
-        replace = 'sr', -- Replace surrounding
+        add = 'gsa', -- Add surrounding in Normal and Visual modes
+        delete = 'gsd', -- Delete surrounding
+        find = 'gsf', -- Find surrounding (to the right)
+        find_left = 'gsF', -- Find surrounding (to the left)
+        highlight = 'gsh', -- Highlight surrounding
+        replace = 'gsr', -- Replace surrounding
         update_n_lines = '', -- Update `n_lines`
 
         suffix_last = 'l', -- Suffix to search with "prev" method
@@ -56,6 +57,7 @@ return {
           { name = 'Find file', action = 'Telescope find_files', section = section },
           { name = 'Grep text', action = 'Telescope live_grep', section = section },
           { name = 'New File', action = 'ene | startinsert', section = section },
+          { name = 'Tree', action = 'Neotree float', section = section },
           { name = 'Lazy', action = 'Lazy', section = section },
           { name = 'Quit', action = 'qa', section = section },
         }

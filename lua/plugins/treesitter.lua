@@ -123,6 +123,17 @@ return {
       enable_autocmd = false,
     },
   },
+
+  --- Indent guides
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {
+      scope = { enabled = true, show_start = false },
+    },
+  },
   -- Split / Join nodes
   {
     'wansmer/treesj',

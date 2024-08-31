@@ -25,8 +25,9 @@ return {
         end,
       },
     },
+    popup_border_style = 'rounded',
     window = {
-      width = 55,
+      width = 60,
       mappings = {
         ['l'] = 'open',
         ['h'] = 'close_node',
