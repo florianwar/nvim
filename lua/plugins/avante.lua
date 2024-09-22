@@ -9,7 +9,7 @@ return {
       })
 
       return {
-        provider = 'copilot',
+        provider = 'claude',
         mappings = {
           ask = '<leader>aa',
           edit = '<leader>ae',
