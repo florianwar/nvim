@@ -69,7 +69,7 @@ return {
                 [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
               },
             },
-            virtual_text = false,
+            virtual_text = true,
             float = {
               show_header = true,
               source = true,
@@ -227,40 +227,6 @@ return {
       },
     },
   },
-  {
-    'rachartier/tiny-inline-diagnostic.nvim',
-    event = 'VeryLazy',
-    keys = {
-      { '<leader>td', '<cmd>lua require("tiny-inline-diagnostic").toggle()<cr>', desc = '[T]oggle [D]iagnostic' },
-    },
-    opts = {
-      hi = {
-        error = 'DiagnosticError',
-        warn = 'DiagnosticWarn',
-        info = 'DiagnosticInfo',
-        hint = 'DiagnosticHint',
-        arrow = 'NonText',
-        background = 'None', -- Can be a highlight or a hexadecimal color (#RRGGBB)
-        mixing_color = 'None', -- Can be None or a hexadecimal color (#RRGGBB). Used to blend the background color with the diagnostic background color with another color.
-      },
-      options = {
-        show_source = true,
-        softwrap = 70,
-        multiple_diag_under_cursor = true,
-        mutilines = false,
-        overflow = {
-          mode = 'none',
-        },
-        break_line = {
-          enabled = true,
-          after = 75,
-        },
-      },
-      virt_texts = {
-        priority = 10,
-      },
-    },
-  },
   -- Commands for VSCode LSP
   {
     'yioneko/nvim-vtsls',
@@ -271,6 +237,12 @@ return {
         { '<leader>ci', name = '[I]mports' },
         { '<leader>cf', name = '[F]ix and [F]ile' },
         { '<leader>cs', name = '[S]erver' },
+      })
+
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        pattern = { '*.tsx', '*.ts', '*.jsx', '*.js' },
+        command = 'VtsExec organize_imports',
+        group = vim.api.nvim_create_augroup('Organize Imports before saving', {}),
       })
 
       return {
