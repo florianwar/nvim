@@ -77,7 +77,7 @@ map('x', '@', function()
   return ':norm @' .. vim.fn.getcharstr() .. '<cr>'
 end, { expr = true })
 
-map('n', '<leader>tx', '<cmd>!chmod +x %<cr>', { desc = 'Make file e[X]ecutable' })
+map('n', '<leader>tX', '<cmd>!chmod +x %<cr>', { desc = 'Make file e[X]ecutable' })
 -- save with ctrl-s
 map({ 'n', 'i' }, '<c-s>', '<cmd>w<cr><esc>', { desc = '[S]ave File' })
 

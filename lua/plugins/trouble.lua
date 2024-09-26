@@ -3,27 +3,17 @@ return {
     'folke/trouble.nvim',
     keys = {
       {
-        '<leader>fx',
+        '<leader>tx',
         '<cmd>Trouble diagnostics toggle<cr>',
-        desc = 'Diagnosti[X]',
+        desc = 'Toggle Diagnosti[X]',
       },
       {
-        '<leader>fX',
-        '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
-        desc = 'Buffer Diagnosti[X]',
-      },
-      {
-        '<leader>fs',
-        '<cmd>Trouble symbols toggle focus=true<cr>',
-        desc = '[S]ymbols',
-      },
-      {
-        '<leader>fl',
+        '<leader>tl',
         '<cmd>Trouble loclist toggle<cr>',
         desc = '[L]ocations',
       },
       {
-        '<leader>fq',
+        '<leader>tq',
         '<cmd>Trouble qflist toggle<cr>',
         desc = '[Q]uickfix',
       },

@@ -211,6 +211,7 @@ return {
       formatters_by_ft = {
         lua = { 'stylua' },
         svelte = { 'prettierd', 'prettier', stop_after_first = true },
+        htmlangular = { 'prettierd', 'prettier', stop_after_first = true },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
         javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
@@ -239,7 +240,7 @@ return {
         { '<leader>cs', name = '[S]erver' },
       })
 
-      vim.api.nvim_create_autocmd('BufWritePre', {
+      vim.api.nvim_create_autocmd('BufWritePost', {
         pattern = { '*.tsx', '*.ts', '*.jsx', '*.js' },
         command = 'VtsExec organize_imports',
         group = vim.api.nvim_create_augroup('Organize Imports before saving', {}),
