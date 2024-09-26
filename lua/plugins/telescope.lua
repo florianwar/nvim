@@ -11,6 +11,7 @@ return {
       { 'nvim-telescope/telescope-ui-select.nvim' },
       { 'debugloop/telescope-undo.nvim' },
       { 'xiyaowong/telescope-emoji.nvim' },
+      { 'nvim-telescope/telescope-frecency.nvim' },
       { 'nvim-tree/nvim-web-devicons' },
     },
     config = function()
@@ -62,10 +63,10 @@ return {
         },
         pickers = {
           find_files = {
-            hidden = true,
+            hidden = false,
           },
           live_grep = {
-            hidden = true,
+            hidden = false,
           },
           lsp_definitions = lsp_picker('Definitions'),
           lsp_references = lsp_picker('References'),
@@ -82,6 +83,7 @@ return {
       pcall(telescope.load_extension, 'fzf')
       pcall(telescope.load_extension, 'ui-select')
       pcall(telescope.load_extension, 'emoji')
+      pcall(telescope.load_extension, 'frecency')
 
       -- See `:help telescope.builtin`
       local builtin = require('telescope.builtin')

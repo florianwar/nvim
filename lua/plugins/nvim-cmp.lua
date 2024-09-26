@@ -5,17 +5,8 @@ return {
     dependencies = {
       {
         'L3MON4D3/LuaSnip',
-        build = (function()
-          return 'make install_jsregexp'
-        end)(),
-        dependencies = {
-          {
-            'rafamadriz/friendly-snippets',
-            config = function()
-              require('luasnip.loaders.from_vscode').lazy_load()
-            end,
-          },
-        },
+        build = 'make install_jsregexp',
+        dependencies = { 'rafamadriz/friendly-snippets' },
       },
       'onsails/lspkind.nvim',
       'saadparwaiz1/cmp_luasnip',
@@ -25,7 +16,10 @@ return {
     config = function()
       local cmp = require('cmp')
       local luasnip = require('luasnip')
-      luasnip.config.setup({ paths = { vim.fn.stdpath('config') .. '/snippets/angular' } })
+      require('luasnip.loaders.from_vscode').lazy_load()
+      require('luasnip.loaders.from_vscode').lazy_load({ paths = { vim.fn.stdpath('config') .. 'snippets/angular' } })
+      luasnip.filetype_extend('htmlangular', { 'angular', 'html' })
+      luasnip.filetype_extend('typescript', { 'javascript', 'typescript', 'angular' })
 
       local lspkind = require('lspkind')
       cmp.setup({
@@ -50,8 +44,8 @@ return {
               i18n = '',
             },
             menu = {
+              luasnip = '[Snippet]',
               nvim_lsp = '[LSP]',
-              luasnip = '[LuaSnip]',
               path = '[Path]',
               i18nvim = '[I18Nvim]',
               lazydev = '[LazyDev]',
@@ -87,13 +81,13 @@ return {
           end, { 'i', 's' }),
         }),
         sources = {
+          { name = 'luasnip', option = { use_show_condition = false } },
           { name = 'nvim_lsp' },
           {
             name = 'lazydev',
             group_index = 0,
           },
           { name = 'i18nvim', group_index = 0 },
-          { name = 'luasnip' },
           { name = 'path' },
         },
       })
