@@ -30,7 +30,7 @@ return {
       vim.keymap.set({ 'n', 'v' }, '<c-right>', mc.prevCursor)
 
       -- Delete the main cursor.
-      vim.keymap.set({ 'n', 'v' }, '<leader>md', mc.deleteCursor, { desc = '[D]elete cursor' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>md', mc.deleteCursor, { desc = '[D]delete cursor' })
 
       vim.keymap.set({ 'n', 'v' }, '<c-q>', function()
         if mc.cursorsEnabled() then
@@ -48,7 +48,8 @@ return {
         elseif mc.hasCursors() then
           mc.clearCursors()
         else
-          -- Default <esc> handler.
+          -- Default behavior, clear search highlights.
+          vim.cmd('noh')
         end
       end)
 

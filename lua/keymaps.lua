@@ -39,8 +39,8 @@ map('i', '<A-j>', '<esc><cmd>m .+1<cr>==gi', { desc = 'Move Down', silent = true
 
 map('n', '<leader><tab>', '<c-^>', { desc = 'Toggle last Buffers' })
 
--- clear highlight with escape
-map('n', '<esc>', '<cmd>noh<CR>')
+-- clear highlight with escape -> Clashes with multicursor, handled there
+-- map('n', '<esc>', '<cmd>noh<CR>')
 
 map('n', '<C-w>t', '<C-w>T', { desc = 'Move to new [T]ab' })
 
