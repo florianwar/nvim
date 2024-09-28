@@ -1,7 +1,7 @@
 return {
   {
     'yetone/avante.nvim',
-    event = 'VeryLazy',
+    keys = { { '<leader>aa', '<cmd>Avante<cr>', desc = '[A]vante' } },
     build = 'make',
     opts = function()
       require('which-key').add({
