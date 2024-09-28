@@ -145,8 +145,9 @@ return {
       local ensure_installed = vim.tbl_keys(servers)
       vim.list_extend(ensure_installed, {
         'stylua',
-        'prettierd',
+        'eslint_d',
         'prettier',
+        'prettierd',
         --
         'fixjson', -- json
         'jq', -- json
@@ -210,20 +211,20 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        svelte = { 'prettierd', 'prettier', stop_after_first = true },
-        htmlangular = { 'prettierd', 'prettier', stop_after_first = true },
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
-        typescript = { 'prettierd', 'prettier', stop_after_first = true },
-        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        svelte = { 'prettierd', stop_after_first = true },
+        htmlangular = { 'prettierd', stop_after_first = true },
+        javascript = { 'prettierd', stop_after_first = true },
+        typescript = { 'prettier' }, -- eslint_d causes timeout issues, handle with precommit hook for now
+        javascriptreact = { 'prettierd', stop_after_first = true },
+        typescriptreact = { 'prettierd', stop_after_first = true },
         json = { 'fixjson' },
-        graphql = { 'prettierd', 'prettier', stop_after_first = true },
-        markdown = { 'prettierd', 'prettier', stop_after_first = true },
+        graphql = { 'prettierd', stop_after_first = true },
+        markdown = { 'prettierd', stop_after_first = true },
         bash = { 'beautysh' },
         yaml = { 'yamlfmt' },
         toml = { 'taplo' },
-        css = { 'prettierd', 'prettier', stop_after_first = true },
-        scss = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', stop_after_first = true },
+        scss = { 'prettierd', stop_after_first = true },
         sh = { { 'shellcheck' } },
       },
     },
@@ -238,12 +239,6 @@ return {
         { '<leader>ci', name = '[I]mports' },
         { '<leader>cf', name = '[F]ix and [F]ile' },
         { '<leader>cs', name = '[S]erver' },
-      })
-
-      vim.api.nvim_create_autocmd('BufWritePost', {
-        pattern = { '*.tsx', '*.ts', '*.jsx', '*.js' },
-        command = 'VtsExec organize_imports',
-        group = vim.api.nvim_create_augroup('Organize Imports before saving', {}),
       })
 
       return {
