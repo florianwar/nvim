@@ -62,12 +62,22 @@ map({ 'n', 'x' }, 'M', 'D', { noremap = true })
 -- Jump to beginning and end of line
 map({ 'n', 'o', 'x' }, 'H', '^', { desc = 'Jump to beginning of line' })
 map({ 'n', 'o', 'x' }, 'L', 'g_', { desc = 'Jump to end of line' })
+map('c', '<C-a>', '<C-b>', { desc = 'Start Of Line' })
+map('i', '<C-a>', '<Home>', { desc = 'Start Of Line' })
+map('i', '<C-e>', '<End>', { desc = 'End Of Line' })
+
+-- Select all text
+map('n', '<C-e>', 'gg<S-V>G', { desc = 'Select all Text', silent = true, noremap = true })
 
 -- better indenting
 map('n', '<', '<<')
 map('v', '<', '<gv')
 map('n', '>', '>>')
 map('v', '>', '>gv')
+
+-- Search visually selected text (slightly better than builtins in Neovim>=0.8)
+map('x', '*', [[y/\V<C-R>=escape(@", '/\')<CR><CR>]], { desc = 'Search Selected Text', silent = true })
+map('x', '#', [[y?\V<C-R>=escape(@", '?\')<CR><CR>]], { desc = 'Search Selected Text (Backwards)', silent = true })
 
 --Replace highlighted text
 map('v', 'r', '"hy:%s/<C-r>h//g<left><left>')
