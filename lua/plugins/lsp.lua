@@ -8,6 +8,7 @@ return {
       'hrsh7th/cmp-nvim-lsp',
       { 'j-hui/fidget.nvim', opts = { notification = { window = { winblend = 0 } } } },
       { 'yioneko/nvim-vtsls' },
+      { 'dmmulroy/ts-error-translator.nvim', opts = {} },
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -17,17 +18,10 @@ return {
             vim.keymap.set('n', keys, func, { buffer = event.buf, desc = desc })
           end
 
-          local telescope = require('telescope.builtin')
-
-          map('gd', function()
-            telescope.lsp_definitions() --{ jump_type = 'never' })
-          end, '[G]oto [D]efinition')
-          map('gr', function()
-            telescope.lsp_references({ jump_type = 'never' })
-          end, '[G]oto [R]eferences')
-          map('gD', function()
-            telescope.lsp_type_definitions() --{ jump_type = 'never' })
-          end, '[G]oto Type [D]efinition')
+          map('gd', '<cmd>Glance definitions<cr>', '[G]oto [D]efinition')
+          map('gr', '<cmd>Glance references<cr>', '[G]oto [R]eferences')
+          map('gD', '<cmd>Glance type_definitions<cr>', '[G]oto Type [D]efinition')
+          map('gI', '<cmd>Glance implementations<cr>', '[G]oto [I]mplementations')
 
           map('<leader>cr', vim.lsp.buf.rename, '[R]ename (Symbol)')
           map('<leader>ca', vim.lsp.buf.code_action, '[A]ction')
@@ -51,7 +45,7 @@ return {
           -- Toggle InlayHints
           if client and client.server_capabilities.inlayHintProvider then
             map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }))
             end, '[T]oggle Inlay [H]ints')
           end
 
@@ -93,6 +87,12 @@ return {
         angularls = {},
         vtsls = {
           -- see: https://github.com/yioneko/vtsls/blob/main/packages/service/configuration.schema.json
+          handlers = {
+            ['textDocument/publishDiagnostics'] = function(err, result, ctx, config)
+              require('ts-error-translator').translate_diagnostics(err, result, ctx, config)
+              vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
+            end,
+          },
           settings = {
             vtsls = {
               autoUseWorkspaceTsdk = true,
@@ -177,6 +177,74 @@ return {
         },
       })
     end,
+  },
+  {
+    'dnlhc/glance.nvim',
+    cmd = { 'Glance' },
+    event = 'LspAttach',
+    opts = {
+      border = {
+        enable = true,
+      },
+      use_trouble_qf = true,
+      hooks = {
+        before_open = function(results, open, jump, method)
+          local uri = vim.uri_from_bufnr(0)
+          if #results == 1 then
+            local target_uri = results[1].uri or results[1].targetUri
+
+            if target_uri == uri then
+              jump(results[1])
+            else
+              open(results)
+            end
+          else
+            open(results)
+          end
+        end,
+      },
+    },
+  },
+  {
+    'VidocqH/lsp-lens.nvim',
+    event = 'LspAttach',
+    opts = {
+      sections = {
+        definition = false,
+        references = function(count)
+          return '󰌹 Ref: ' .. count
+        end,
+        implements = function(count)
+          return '󰡱 Imp: ' .. count
+        end,
+        git_authors = false,
+      },
+    },
+    keys = {
+      { '<leader>te', '<cmd>LspLensToggle<cr>', desc = '[T]oggle Lsp L[e]ns' },
+    },
+  },
+  {
+    'Wansmer/symbol-usage.nvim',
+    event = function()
+      if vim.fn.has('nvim-0.10') == 1 then
+        return 'LspAttach'
+      else
+        return 'BufRead'
+      end
+    end,
+    opts = {
+      vt_position = 'end_of_line',
+      text_format = function(symbol)
+        if symbol.references then
+          local usage = symbol.references <= 1 and 'usage' or 'usages'
+          local num = symbol.references == 0 and 'no' or symbol.references
+          return string.format(' 󰌹 %s %s', num, usage)
+        else
+          return ''
+        end
+      end,
+    },
   },
   {
     'folke/lazydev.nvim',
@@ -300,24 +368,6 @@ return {
         { desc = 'Angular: Compile Template', noremap = true, silent = true }
       )
     end,
-  },
-  {
-    'OlegGulevskyy/better-ts-errors.nvim',
-    dependencies = { 'MunifTanjim/nui.nvim' },
-    keys = {
-      {
-        '<leader>ce',
-        function()
-          require('better-ts-errors').toggle()
-        end,
-        desc = 'Typescript [E]rrors',
-      },
-    },
-    opts = {
-      keymaps = {
-        toggle = nil,
-      },
-    },
   },
   {
     '2nthony/sortjson.nvim',
