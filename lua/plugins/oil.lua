@@ -6,9 +6,6 @@ return {
         ['<Esc>'] = { callback = 'actions.close', mode = 'n' },
         ['q'] = { callback = 'actions.close', mode = 'n' },
         ['g?'] = 'actions.show_help',
-        -- lets see how this impacts renaming
-        -- ['h'] = { callback = 'actions.parent', mode = 'n' },
-        -- ['l'] = { callback = 'actions.select', mode = 'n' },
         ['s'] = { callback = 'actions.select_vsplit', mode = 'n' },
         ['<CR>'] = 'actions.select',
         ['<C-p>'] = 'actions.preview',
@@ -23,6 +20,7 @@ return {
       },
       use_default_keymaps = false,
     },
+    cmd = 'Oil',
     keys = {
       { '-', '<cmd>Oil<cr>', desc = 'Open parent directory' },
     },

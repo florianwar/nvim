@@ -57,7 +57,7 @@ return {
           { name = 'Find file', action = 'Telescope find_files', section = section },
           { name = 'Grep text', action = 'Telescope live_grep', section = section },
           { name = 'New File', action = 'ene | startinsert', section = section },
-          { name = 'Tree', action = 'Neotree float', section = section },
+          { name = 'Browse', action = 'Oil', section = section },
           { name = 'Lazy', action = 'Lazy', section = section },
           { name = 'Quit', action = 'qa', section = section },
         }
