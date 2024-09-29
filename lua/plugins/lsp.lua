@@ -353,20 +353,11 @@ return {
       }
     end,
     opts = {},
+    -- stylua: ignore
     config = function()
       local ng = require('ng')
-      vim.keymap.set(
-        'n',
-        'gac',
-        ng.goto_component_with_template_file,
-        { desc = 'Angular: Goto Component', noremap = true, silent = true }
-      )
-      vim.keymap.set(
-        'n',
-        'gaT',
-        ng.get_template_tcb,
-        { desc = 'Angular: Compile Template', noremap = true, silent = true }
-      )
+      vim.keymap.set( 'n', 'gac', ng.goto_component_with_template_file, { desc = 'Angular: Goto Component', noremap = true, silent = true })
+      vim.keymap.set( 'n', 'gaT', ng.get_template_tcb, { desc = 'Angular: Compile Template', noremap = true, silent = true })
     end,
   },
   {

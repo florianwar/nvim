@@ -20,20 +20,10 @@ return {
     event = 'BufRead',
     keys = function()
       local plugin = require('gitsigns')
+      --stylua: ignore
       return {
-        {
-          '<leader>tb',
-          function()
-            plugin.toggle_current_line_blame()
-          end,
-          desc = '[T]oggle Git [B]lame (inline)',
-        },
-        {
-          '<leader>gb',
-          function()
-            plugin.blame_line({ full = true })
-          end,
-        },
+        { '<leader>tb', function() plugin.toggle_current_line_blame() end, desc = '[T]oggle Git [B]lame (inline)', },
+        { '<leader>gb', function() plugin.blame_line({ full = true }) end, desc = '[G]it [B]lame', },
       }
     end,
     opts = {
@@ -86,7 +76,6 @@ return {
     opts = {
       keymaps = {
         view = {
-          -- close mapping & fix noice setting buffer dirty
           { 'n', 'q', '<cmd>set hidden<cr><cmd>DiffviewClose<cr><cmd>set nohidden<cr>' },
         },
         file_panel = {
@@ -98,8 +87,10 @@ return {
       },
     },
     keys = {
+      { '<leader>gD', '<cmd>DiffviewFileHistory<CR>', desc = '[G]it [D]iff Repo' },
+      { '<leader>gd', '<cmd>DiffviewOpen<CR>', desc = '[G]it [D]iff File' },
       {
-        '<leader>ghl',
+        '<leader>gl',
         function()
           local current_line = vim.fn.line('.')
           local file = vim.fn.expand('%')
@@ -107,7 +98,7 @@ return {
           local cmd = string.format('DiffviewFileHistory --follow -L%s,%s:%s', current_line, current_line, file)
           vim.cmd(cmd)
         end,
-        desc = '[G]it [H]istory [L]ine',
+        desc = '[G]it [L]ine',
       },
     },
   },
