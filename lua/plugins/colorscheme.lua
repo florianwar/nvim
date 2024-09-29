@@ -13,15 +13,25 @@ return {
       integrations = {
         cmp = true,
         flash = true,
-        gitsigns = true,
         harpoon = true,
         leap = true,
-        lsp_saga = true,
         lsp_trouble = true,
+        render_markdown = true,
+        gitsigns = true,
+        grug_far = true,
         mason = true,
         mini = true,
         native_lsp = {
           enabled = true,
+          virtual_text = {
+            errors = { 'italic' },
+            hints = { 'italic' },
+            warnings = { 'italic' },
+            information = { 'italic' },
+          },
+          inlay_hints = {
+            background = true,
+          },
           underlines = {
             errors = { 'undercurl' },
             hints = { 'undercurl' },
@@ -35,7 +45,7 @@ return {
         semantic_tokens = true,
         telescope = true,
         treesitter = true,
-        rainbow_delimiters = true,
+        ufo = true,
         which_key = true,
       },
     },
