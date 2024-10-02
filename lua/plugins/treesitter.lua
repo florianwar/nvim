@@ -148,7 +148,9 @@ return {
     },
     {
       'chrisgrieser/nvim-spider',
-      opts = {},
+      opts = {
+        skipInsignificantPunctuation = false,
+      },
       -- stylua: ignore
       keys = {
         { "e", mode = { "n", "o", "x" }, function() require("spider").motion("e") end, desc = "Spider-e" },
