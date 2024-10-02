@@ -1,4 +1,6 @@
 vim.g.autoformat = true
+vim.g.sessionoptions = { 'curdir', 'folds', 'winsize' }
+
 vim.cmd('colorscheme catppuccin')
 
 local opt = vim.opt
