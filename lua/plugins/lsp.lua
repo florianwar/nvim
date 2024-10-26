@@ -73,6 +73,8 @@ return {
               focusable = true,
             },
           })
+
+          vim.diagnostic.enable()
         end,
       })
 
@@ -84,7 +86,6 @@ return {
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       local servers = {
-        angularls = {},
         vtsls = {
           -- see: https://github.com/yioneko/vtsls/blob/main/packages/service/configuration.schema.json
           handlers = {
@@ -145,7 +146,6 @@ return {
       local ensure_installed = vim.tbl_keys(servers)
       vim.list_extend(ensure_installed, {
         'stylua',
-        'eslint_d',
         'prettier',
         'prettierd',
         --
@@ -168,10 +168,6 @@ return {
           function(server_name)
             local server = servers[server_name] or {}
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            --HACK: disable rename for angularls due duplicate with ts
-            if server_name == 'angularls' then
-              server.capabilities.renameProvider = false
-            end
             require('lspconfig')[server_name].setup(server)
           end,
         },
@@ -183,6 +179,7 @@ return {
     cmd = { 'Glance' },
     event = 'LspAttach',
     opts = {
+      height = 25,
       border = {
         enable = true,
       },
@@ -209,6 +206,7 @@ return {
     'VidocqH/lsp-lens.nvim',
     event = 'LspAttach',
     opts = {
+      enable = false,
       sections = {
         definition = false,
         references = function(count)
@@ -226,6 +224,7 @@ return {
   },
   {
     'Wansmer/symbol-usage.nvim',
+    enable = false,
     event = function()
       if vim.fn.has('nvim-0.10') == 1 then
         return 'LspAttach'
@@ -263,18 +262,20 @@ return {
     'stevearc/conform.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
     opts = {
-      format_on_save = function(bufnr)
+      format_after_save = function(bufnr)
         local disable_filetypes = {
           c = true,
           cpp = true,
           json = false,
           yaml = true,
-          markdown = true,
         }
 
         return {
-          timeout_ms = 500,
+          timeout_ms = 1500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+          callback = function()
+            vim.diagnostic.enable()
+          end,
         }
       end,
       formatters_by_ft = {
@@ -282,14 +283,14 @@ return {
         svelte = { 'prettierd', stop_after_first = true },
         htmlangular = { 'prettierd', stop_after_first = true },
         javascript = { 'prettierd', stop_after_first = true },
-        typescript = { 'prettier' }, -- eslint_d causes timeout issues, handle with precommit hook for now
+        typescript = { 'prettierd' }, -- eslint_d causes timeout issues, handle with precommit hook for now
         javascriptreact = { 'prettierd', stop_after_first = true },
         typescriptreact = { 'prettierd', stop_after_first = true },
         json = { 'fixjson' },
         graphql = { 'prettierd', stop_after_first = true },
         markdown = { 'prettierd', stop_after_first = true },
         bash = { 'beautysh' },
-        yaml = { 'yamlfmt' },
+        -- yaml = { 'yamlfmt' },
         toml = { 'taplo' },
         css = { 'prettierd', stop_after_first = true },
         scss = { 'prettierd', stop_after_first = true },
@@ -347,6 +348,7 @@ return {
   {
     'joeveiga/ng.nvim',
     event = 'LspAttach',
+    enable = false,
     keys = function(plugin)
       return {
         { 'gat', plugin.goto_template_for_component, desc = '[G]oto [A]ngular [T]emplate', silent = true },

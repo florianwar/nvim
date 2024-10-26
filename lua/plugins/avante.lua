@@ -48,9 +48,9 @@ return {
       {
         'MeanderingProgrammer/render-markdown.nvim',
         opts = {
-          ft = { 'markdown', 'Avante' },
+          ft = { 'markdown', 'Avante', 'nofile', 'noice' },
         },
-        ft = { 'markdown', 'Avante' },
+        ft = { 'markdown', 'Avante', 'nofile', 'noice' },
       },
     },
   },

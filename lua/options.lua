@@ -1,5 +1,4 @@
 vim.g.autoformat = true
-vim.g.sessionoptions = { 'curdir', 'folds', 'winsize' }
 
 vim.cmd('colorscheme catppuccin')
 
@@ -45,6 +44,7 @@ opt.undofile = true
 opt.autowrite = true
 opt.swapfile = false
 opt.backup = false
+opt.sessionoptions = { 'curdir', 'folds', 'winsize' }
 
 opt.updatetime = 250
 opt.timeoutlen = 300

@@ -18,7 +18,7 @@ return {
       local luasnip = require('luasnip')
       require('luasnip.loaders.from_vscode').lazy_load()
       require('luasnip.loaders.from_vscode').lazy_load({ paths = { vim.fn.stdpath('config') .. 'snippets/angular' } })
-      luasnip.filetype_extend('htmlangular', { 'angular', 'html' })
+      luasnip.filetype_extend('htmlangular', { 'angular' })
       luasnip.filetype_extend('typescript', { 'javascript', 'typescript', 'angular' })
 
       local lspkind = require('lspkind')

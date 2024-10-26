@@ -4,6 +4,7 @@ return {
   { 'echasnovski/mini.comment', opts = {} },
   { 'echasnovski/mini.icons', opts = {} },
   { 'echasnovski/mini.pairs', opts = {} },
+  { 'echasnovski/mini.cursorword', opts = {} },
   {
     'echasnovski/mini.surround',
     opts = {
