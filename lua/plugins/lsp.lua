@@ -206,7 +206,7 @@ return {
     'VidocqH/lsp-lens.nvim',
     event = 'LspAttach',
     opts = {
-      enable = false,
+      enable = true,
       sections = {
         definition = false,
         references = function(count)
@@ -271,7 +271,7 @@ return {
         }
 
         return {
-          timeout_ms = 1500,
+          timeout_ms = 1000,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
           callback = function()
             vim.diagnostic.enable()
@@ -283,7 +283,7 @@ return {
         svelte = { 'prettierd', stop_after_first = true },
         htmlangular = { 'prettierd', stop_after_first = true },
         javascript = { 'prettierd', stop_after_first = true },
-        typescript = { 'prettierd' }, -- eslint_d causes timeout issues, handle with precommit hook for now
+        typescript = { 'prettierd', stop_after_first = true },
         javascriptreact = { 'prettierd', stop_after_first = true },
         typescriptreact = { 'prettierd', stop_after_first = true },
         json = { 'fixjson' },
@@ -343,24 +343,6 @@ return {
     event = 'BufRead package.json',
     dependencies = { 'MunifTanjim/nui.nvim' },
     opts = {},
-  },
-  -- Angular LSP support
-  {
-    'joeveiga/ng.nvim',
-    event = 'LspAttach',
-    enable = false,
-    keys = function(plugin)
-      return {
-        { 'gat', plugin.goto_template_for_component, desc = '[G]oto [A]ngular [T]emplate', silent = true },
-      }
-    end,
-    opts = {},
-    -- stylua: ignore
-    config = function()
-      local ng = require('ng')
-      vim.keymap.set( 'n', 'gac', ng.goto_component_with_template_file, { desc = 'Angular: Goto Component', noremap = true, silent = true })
-      vim.keymap.set( 'n', 'gaT', ng.get_template_tcb, { desc = 'Angular: Compile Template', noremap = true, silent = true })
-    end,
   },
   {
     '2nthony/sortjson.nvim',

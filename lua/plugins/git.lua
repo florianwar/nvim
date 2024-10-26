@@ -20,10 +20,32 @@ return {
     event = 'BufRead',
     keys = function()
       local plugin = require('gitsigns')
-      --stylua: ignore
       return {
-        { '<leader>tb', function() plugin.toggle_current_line_blame() end, desc = '[T]oggle Git [B]lame (inline)', },
-        { '<leader>gb', function() plugin.blame_line({ full = true }) end, desc = '[G]it [B]lame', },
+        {
+          ']h',
+          function()
+            plugin.nav_hunk('next')
+          end,
+          desc = 'Next Hunk',
+        },
+        {
+          '[h',
+          function()
+            plugin.nav_hunk('prev')
+          end,
+          desc = 'Previous Hunk',
+        },
+        { '<leader>ghs', plugin.stage_hunk, desc = '[G]it [H]unk [S]tage' },
+        { '<leader>ghu', plugin.undo_stage_hunk, desc = '[G]it [H]unk [U]nstage' },
+        { '<leader>ghp', plugin.preview_hunk, desc = '[G]it [H]unk [P]review' },
+        { '<leader>tb', plugin.toggle_current_line_blame, desc = '[T]oggle Git [B]lame (inline)' },
+        {
+          '<leader>gb',
+          function()
+            plugin.blame_line({ full = true })
+          end,
+          desc = '[G]it [B]lame',
+        },
       }
     end,
     opts = {
@@ -47,7 +69,7 @@ return {
       current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
       current_line_blame_opts = {
         virt_text = true,
-        virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+        virt_text_pos = 'eol',
         delay = 1000,
         ignore_whitespace = false,
         virt_text_priority = 100,
@@ -101,5 +123,14 @@ return {
         desc = '[G]it [L]ine',
       },
     },
+  },
+  {
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'sindrets/diffview.nvim',
+      'nvim-telescope/telescope.nvim',
+    },
+    config = true,
   },
 }
