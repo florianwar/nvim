@@ -105,6 +105,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter-context',
     dependencies = { 'nvim-treesitter' },
+    enabled = false,
     event = 'VeryLazy',
     opts = { enable = 'true', mode = 'cursor', max_lines = 4 },
   },

@@ -262,7 +262,7 @@ return {
     'stevearc/conform.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
     opts = {
-      format_after_save = function(bufnr)
+      format_on_save = function(bufnr)
         local disable_filetypes = {
           c = true,
           cpp = true,
@@ -281,19 +281,19 @@ return {
       formatters_by_ft = {
         lua = { 'stylua' },
         svelte = { 'prettierd', stop_after_first = true },
-        htmlangular = { 'prettierd', stop_after_first = true },
-        javascript = { 'prettierd', stop_after_first = true },
-        typescript = { 'prettierd', stop_after_first = true },
-        javascriptreact = { 'prettierd', stop_after_first = true },
-        typescriptreact = { 'prettierd', stop_after_first = true },
+        htmlangular = { 'prettier', stop_after_first = true },
+        javascript = { 'prettier', stop_after_first = true },
+        typescript = { 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettier', stop_after_first = true },
         json = { 'fixjson' },
-        graphql = { 'prettierd', stop_after_first = true },
-        markdown = { 'prettierd', stop_after_first = true },
+        graphql = { 'prettier', stop_after_first = true },
+        markdown = { 'prettier', stop_after_first = true },
         bash = { 'beautysh' },
         -- yaml = { 'yamlfmt' },
         toml = { 'taplo' },
-        css = { 'prettierd', stop_after_first = true },
-        scss = { 'prettierd', stop_after_first = true },
+        css = { 'prettier', stop_after_first = true },
+        scss = { 'prettier', stop_after_first = true },
         sh = { { 'shellcheck' } },
       },
     },

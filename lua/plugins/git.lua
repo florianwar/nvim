@@ -1,21 +1,5 @@
 return {
   {
-    'kdheepak/lazygit.nvim',
-    cmd = {
-      'LazyGit',
-      'LazyGitConfig',
-      'LazyGitCurrentFile',
-      'LazyGitFilter',
-      'LazyGitFilterCurrentFile',
-    },
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-    keys = {
-      { '<leader>gg', '<cmd>LazyGit<cr>', desc = '[G]it Lazy[G]it' },
-    },
-  },
-  {
     'lewis6991/gitsigns.nvim',
     event = 'BufRead',
     keys = function()
@@ -130,6 +114,10 @@ return {
       'nvim-lua/plenary.nvim',
       'sindrets/diffview.nvim',
       'nvim-telescope/telescope.nvim',
+    },
+    lazy = false,
+    keys = {
+      { '<leader>gg', '<cmd>Neogit<CR>', desc = '[G]it neo[G]it' },
     },
     config = true,
   },

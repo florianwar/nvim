@@ -1,8 +1,9 @@
 return {
   'florianwar/i18nvim',
-  depends = {
-    'hrsh7th/nvim-cmp',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
     'MunifTanjim/nui.nvim',
+    'grapp-dev/nui-components.nvim',
   },
   opts = {
     languages = { 'de', 'gb' },
