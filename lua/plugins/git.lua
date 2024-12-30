@@ -91,6 +91,23 @@ return {
           { 'n', 'q', '<cmd>set hidden<cr><cmd>DiffviewClose<cr><cmd>set nohidden<cr>' },
         },
       },
+      view = {
+        default = {
+          layout = 'diff2_horizontal',
+          disable_diagnostics = false,
+          winbar_info = false,
+        },
+        merge_tool = {
+          layout = 'diff3_mixed',
+          disable_diagnostics = true,
+          winbar_info = true,
+        },
+        file_history = {
+          layout = 'diff2_horizontal',
+          disable_diagnostics = false,
+          winbar_info = false,
+        },
+      },
     },
     keys = {
       { '<leader>gD', '<cmd>DiffviewFileHistory<CR>', desc = '[G]it [D]iff Repo' },
