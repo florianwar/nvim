@@ -10,7 +10,10 @@ return {
     end,
     dependencies = {
       { 'nvim-treesitter/nvim-treesitter-textobjects' },
-      { 'chrisgrieser/nvim-various-textobjs', opts = { useDefaultKeymaps = true } },
+      {
+        'chrisgrieser/nvim-various-textobjs',
+        opts = { keymaps = { useDefaults = true } },
+      },
     },
     cmd = { 'TSUpdateSync', 'TSUpdate', 'TSInstall' },
     keys = {
@@ -147,17 +150,62 @@ return {
       use_default_keymaps = false,
       max_join_length = 120,
     },
-    {
-      'chrisgrieser/nvim-spider',
-      opts = {
-        skipInsignificantPunctuation = false,
+  },
+  {
+    'chrisgrieser/nvim-spider',
+    opts = {
+      skipInsignificantPunctuation = false,
+    },
+    keys = {
+      {
+        'e',
+        mode = { 'n', 'o', 'x' },
+        function()
+          require('spider').motion('e')
+        end,
+        desc = 'Spider-e',
       },
-      -- stylua: ignore
-      keys = {
-        { "e", mode = { "n", "o", "x" }, function() require("spider").motion("e") end, desc = "Spider-e" },
-        { "w", mode = { "n", "o", "x" }, function() require("spider").motion("w") end, desc = "Spider-w" },
-        { "b", mode = { "n", "o", "x" }, function() require("spider").motion("b") end, desc = "Spider-b" },
+      {
+        'w',
+        mode = { 'n', 'o', 'x' },
+        function()
+          require('spider').motion('w')
+        end,
+        desc = 'Spider-w',
       },
+      {
+        'b',
+        mode = { 'n', 'o', 'x' },
+        function()
+          require('spider').motion('b')
+        end,
+        desc = 'Spider-b',
+      },
+    },
+  },
+  {
+    'aaronik/treewalker.nvim',
+    keys = {
+      { '<c-k>', '<cmd>Treewalker Up<cr>', mode = { 'n', 'v' }, desc = 'Move node up' },
+      { '<c-j>', '<cmd>Treewalker Down<cr>', mode = { 'n', 'v' }, desc = 'Move node down' },
+      { '<c-l>', '<cmd>Treewalker Right<cr>', mode = { 'n', 'v' }, desc = 'Move node right' },
+      { '<c-h>', '<cmd>Treewalker Left<cr>', mode = { 'n', 'v' }, desc = 'Move node left' },
+      { '<a-J>', '<cmd>Treewalker SwapDown<cr>', desc = 'Swap node down' },
+      { '<a-K>', '<cmd>Treewalker SwapUp<cr>', desc = 'Swap node up' },
+    },
+    -- The following options are the defaults.
+    -- Treewalker aims for sane defaults, so these are each individually optional,
+    -- and the whole opts block is optional as well.
+    opts = {
+      -- Whether to briefly highlight the node after jumping to it
+      highlight = true,
+
+      -- How long should above highlight last (in ms)
+      highlight_duration = 250,
+
+      -- The color of the above highlight. Must be a valid vim highlight group.
+      -- (see :h highlight-group for options)
+      highlight_group = 'ColorColumn',
     },
   },
   {

@@ -3,7 +3,7 @@ return {
     'MunsMan/kitty-navigator.nvim',
     keys = {
       {
-        '<C-h>',
+        '<C-w>j',
         function()
           require('kitty-navigator').navigateLeft()
         end,
@@ -11,7 +11,7 @@ return {
         mode = { 'n' },
       },
       {
-        '<C-j>',
+        '<C-w>j',
         function()
           require('kitty-navigator').navigateDown()
         end,
@@ -19,7 +19,7 @@ return {
         mode = { 'n' },
       },
       {
-        '<C-k>',
+        '<C-w>k',
         function()
           require('kitty-navigator').navigateUp()
         end,
@@ -27,7 +27,7 @@ return {
         mode = { 'n' },
       },
       {
-        '<C-l>',
+        '<C-w>l',
         function()
           require('kitty-navigator').navigateRight()
         end,
