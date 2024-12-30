@@ -13,12 +13,15 @@ return {
       },
     },
     opts = {
+      popupWin = {
+        hideKeymapHints = true,
+      },
       keymaps = {
         -- normal & visual mode
         confirm = '<C-y>',
         abort = '<esc>',
-        prevSubst = '<up>',
-        nextSubst = '<down>',
+        prevSubstitutionInHistory = '<up>',
+        nextSubstitutionInHistory = '<down>',
         openAtRegex101 = 'R',
         insertModeConfirm = '<C-y>', -- (except this one, obviously)
       },
