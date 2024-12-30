@@ -68,6 +68,17 @@ return {
           live_grep = {
             hidden = false,
           },
+          buffers = {
+            sort_lastused = true,
+            mappings = {
+              i = {
+                ['<c-d>'] = require('telescope.actions').delete_buffer,
+              },
+              n = {
+                ['<c-d>'] = require('telescope.actions').delete_buffer,
+              },
+            },
+          },
           lsp_definitions = lsp_picker('Definitions'),
           lsp_references = lsp_picker('References'),
           lsp_type_definitions = lsp_picker('Type Definitions'),
