@@ -24,6 +24,7 @@ vim.api.nvim_create_autocmd('FileType', {
     'man',
     'qf',
     'query',
+    'grug-far',
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -39,7 +40,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
   end,
 })
 
--- No diagnostics in node modules
+-- No diagnostics in node_modules
 vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
   group = vim.api.nvim_create_augroup('DisableEslintOnNodeModules', { clear = true }),
   pattern = { '**/node_modules/**', 'node_modules', '/node_modules/*' },
