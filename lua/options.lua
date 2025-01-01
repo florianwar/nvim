@@ -51,7 +51,7 @@ opt.timeoutlen = 300
 
 opt.termguicolors = true
 opt.pumblend = 0
-opt.pumheight = 12
+opt.pumheight = 15
 
 opt.formatoptions:remove('o')
 
