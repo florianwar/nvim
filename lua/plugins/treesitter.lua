@@ -185,28 +185,33 @@ return {
   },
   {
     'aaronik/treewalker.nvim',
-    keys = {
-      { '<c-k>', '<cmd>Treewalker Up<cr>', mode = { 'n', 'v' }, desc = 'Move node up' },
-      { '<c-j>', '<cmd>Treewalker Down<cr>', mode = { 'n', 'v' }, desc = 'Move node down' },
-      { '<c-l>', '<cmd>Treewalker Right<cr>', mode = { 'n', 'v' }, desc = 'Move node right' },
-      { '<c-h>', '<cmd>Treewalker Left<cr>', mode = { 'n', 'v' }, desc = 'Move node left' },
-      { '<a-J>', '<cmd>Treewalker SwapDown<cr>', desc = 'Swap node down' },
-      { '<a-K>', '<cmd>Treewalker SwapUp<cr>', desc = 'Swap node up' },
-    },
-    -- The following options are the defaults.
-    -- Treewalker aims for sane defaults, so these are each individually optional,
-    -- and the whole opts block is optional as well.
-    opts = {
-      -- Whether to briefly highlight the node after jumping to it
-      highlight = true,
+    dependencies = { 'anuvyklack/hydra.nvim' },
+    event = 'VeryLazy',
+    config = function(_, opts)
+      -- since hydra blocks the eventloop we need to disable the highlight
+      require('treewalker').setup({ highlight = false })
 
-      -- How long should above highlight last (in ms)
-      highlight_duration = 250,
-
-      -- The color of the above highlight. Must be a valid vim highlight group.
-      -- (see :h highlight-group for options)
-      highlight_group = 'ColorColumn',
-    },
+      require('hydra')({
+        name = 'Treewalker',
+        config = {
+          hint = false,
+        },
+        mode = 'n',
+        body = '<c-f>',
+        heads = {
+          { 'h', '<cmd>Treewalker Left<cr>', { desc = 'Move node left' } },
+          { 'j', '<cmd>Treewalker Down<cr>', { desc = 'Move node down' } },
+          { 'k', '<cmd>Treewalker Up<cr>', { desc = 'Move node up' } },
+          { 'l', '<cmd>Treewalker Right<cr>', { desc = 'Move node right' } },
+          { 'H', '<cmd>TSTextobjectSwapPrevious @parameter.inner<CR>', { desc = 'Swap parameter ' } },
+          { 'L', '<cmd>TSTextobjectSwapNext @parameter.inner<CR>', { desc = 'Swap parameter' } },
+          { 'J', '<cmd>Treewalker SwapDown<cr>', { desc = 'Swap node down' } },
+          { 'K', '<cmd>Treewalker SwapUp<cr>', { desc = 'Swap node up' } },
+          { 'J', '<cmd>Treewalker SwapDown<cr>', { desc = 'Swap node down' } },
+          { 'K', '<cmd>Treewalker SwapUp<cr>', { desc = 'Swap node up' } },
+        },
+      })
+    end,
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
