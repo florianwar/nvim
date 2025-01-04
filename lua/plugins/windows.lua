@@ -12,8 +12,6 @@ return {
       require('windows').setup({
         animation = {
           enable = false,
-          duration = 100,
-          fps = 60,
         },
       })
     end,

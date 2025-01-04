@@ -139,10 +139,11 @@ return {
           enable = false,
         },
         cursor = {
-          timing = animate.gen_timing.linear({ duration = 30, unit = 'total' }),
+          enable = false,
         },
         resize = {
-          timing = animate.gen_timing.linear({ duration = 30, unit = 'total' }),
+          enable = true,
+          timing = animate.gen_timing.linear({ duration = 20, unit = 'total' }),
         },
         scroll = {
           timing = animate.gen_timing.linear({ duration = 30, unit = 'total' }),
