@@ -25,6 +25,12 @@ return {
           return ctx.mode == 'cmdline' and 'auto_insert' or 'preselect'
         end,
       },
+      trigger = {
+
+        show_on_trigger_character = true,
+        show_on_accept_on_trigger_character = true,
+        show_on_insert_on_trigger_character = true,
+      },
       menu = {
         border = 'rounded',
         cmdline_position = function()
@@ -127,7 +133,7 @@ return {
     },
 
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer' },
+      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
       cmdline = function()
         local type = vim.fn.getcmdtype()
         if type == '/' or type == '?' then
@@ -149,7 +155,7 @@ return {
           score_offset = 0,
         },
         path = {
-          min_keyword_length = 0,
+          min_keyword_length = 2,
         },
         snippets = {
           min_keyword_length = 2,
@@ -163,6 +169,12 @@ return {
             end
           end,
           max_items = 5,
+        },
+        lazydev = {
+
+          name = 'LazyDev',
+          module = 'lazydev.integrations.blink',
+          score_offset = 100,
         },
       },
     },
