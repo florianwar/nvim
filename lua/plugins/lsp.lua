@@ -260,7 +260,7 @@ return {
     },
   },
   { 'Bilal2453/luvit-meta', lazy = true }, -- optional `vim.uv` typings
-  -- Formatting with LSPs
+  -- Formatting
   {
     'stevearc/conform.nvim',
     event = { 'BufReadPre', 'BufNewFile' },

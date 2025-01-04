@@ -187,31 +187,15 @@ return {
     'aaronik/treewalker.nvim',
     dependencies = { 'anuvyklack/hydra.nvim' },
     event = 'VeryLazy',
-    config = function(_, opts)
-      -- since hydra blocks the eventloop we need to disable the highlight
-      require('treewalker').setup({ highlight = false })
-
-      require('hydra')({
-        name = 'Treewalker',
-        config = {
-          hint = false,
-        },
-        mode = 'n',
-        body = '<c-f>',
-        heads = {
-          { 'h', '<cmd>Treewalker Left<cr>', { desc = 'Move node left' } },
-          { 'j', '<cmd>Treewalker Down<cr>', { desc = 'Move node down' } },
-          { 'k', '<cmd>Treewalker Up<cr>', { desc = 'Move node up' } },
-          { 'l', '<cmd>Treewalker Right<cr>', { desc = 'Move node right' } },
-          { 'H', '<cmd>TSTextobjectSwapPrevious @parameter.inner<CR>', { desc = 'Swap parameter ' } },
-          { 'L', '<cmd>TSTextobjectSwapNext @parameter.inner<CR>', { desc = 'Swap parameter' } },
-          { 'J', '<cmd>Treewalker SwapDown<cr>', { desc = 'Swap node down' } },
-          { 'K', '<cmd>Treewalker SwapUp<cr>', { desc = 'Swap node up' } },
-          { 'J', '<cmd>Treewalker SwapDown<cr>', { desc = 'Swap node down' } },
-          { 'K', '<cmd>Treewalker SwapUp<cr>', { desc = 'Swap node up' } },
-        },
-      })
-    end,
+    keys = {
+      { '<s-up>', '<cmd>Treewalker Up<cr>', { desc = 'Treewalker Up' } },
+      { '<s-down>', '<cmd>Treewalker Down<cr>', { desc = 'Treewalker Down' } },
+      { '<s-left>', '<cmd>Treewalker Left<cr>', { desc = 'Treewalker Left' } },
+      { '<s-right>', '<cmd>Treewalker Right<cr>', { desc = 'Treewalker Right' } },
+      { '<s-f8>', '<cmd>Treewalker SwapUp<cr>', { desc = 'Treewalker SwapUp' } },
+      { '<s-f9>', '<cmd>Treewalker SwapDown<cr>', { desc = 'Treewalker SwapDown' } },
+    },
+    opts = {},
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
