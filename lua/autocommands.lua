@@ -24,6 +24,8 @@ vim.api.nvim_create_autocmd('FileType', {
     'qf',
     'query',
     'grug-far',
+    'AvanteInput',
+    'Avante',
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -57,19 +59,5 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     end
     local file = vim.uv.fs_realpath(args.match) or args.match
     vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
-  end,
-})
-
--- Let kitty know when we are in vim
-vim.api.nvim_create_autocmd({ 'VimEnter', 'VimResume' }, {
-  group = vim.api.nvim_create_augroup('KittySetVarVimEnter', { clear = true }),
-  callback = function()
-    io.stdout:write('\x1b]1337;SetUserVar=in_editor=MQo\007')
-  end,
-})
-vim.api.nvim_create_autocmd({ 'VimLeave', 'VimSuspend' }, {
-  group = vim.api.nvim_create_augroup('KittyUnsetVarVimLeave', { clear = true }),
-  callback = function()
-    io.stdout:write('\x1b]1337;SetUserVar=in_editor\007')
   end,
 })

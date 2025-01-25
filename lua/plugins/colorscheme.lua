@@ -12,6 +12,7 @@ return {
       no_underline = false,
       integrations = {
         cmp = true,
+        blink_cmp = true,
         flash = true,
         harpoon = true,
         leap = true,
@@ -42,6 +43,7 @@ return {
         noice = true,
         notify = true,
         neotree = true,
+
         semantic_tokens = true,
         telescope = true,
         treesitter = true,
@@ -53,7 +55,6 @@ return {
   {
     'NvChad/nvim-colorizer.lua',
     event = 'BufReadPre',
-    opts = { -- set to setup table
-    },
+    opts = {},
   },
 }

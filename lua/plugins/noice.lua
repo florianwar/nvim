@@ -4,10 +4,6 @@ return {
     event = 'VeryLazy',
     dependencies = {
       'MunifTanjim/nui.nvim',
-      { 'rcarriga/nvim-notify', opts = { level = 3 } },
-    },
-    keys = {
-      { '<leader>tm', '<cmd>Noice<cr>', desc = '[M]essages' },
     },
     opts = {
       lsp = {
@@ -20,7 +16,7 @@ return {
           enabled = true,
         },
         signature = {
-          enabled = true,
+          enabled = false,
         },
       },
       -- you can enable a preset for easier configuration

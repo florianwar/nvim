@@ -1,5 +1,49 @@
 return {
-  { 'echasnovski/mini.ai', opts = {} },
+  {
+    'echasnovski/mini.ai',
+    dependencies = {
+      { 'nvim-treesitter/nvim-treesitter-textobjects' },
+    },
+    opts = {
+      custom_textobjects = {
+        --- make tag textobject more lenient
+        t = { '<([%p%w]-)%f[^<%p%w][^<>]->.-</%1>', '^<.->().*()</[^/]->$' },
+        --- Subword match
+        e = {
+          -- Lua 5.1 character classes and the undocumented frontier pattern:
+          -- https://www.lua.org/manual/5.1/manual.html#5.4.1
+          -- http://lua-users.org/wiki/FrontierPattern
+          -- note: when I say "letter" I technically mean "letter or digit"
+          {
+            -- Matches a single uppercase letter followed by 1+ lowercase letters.
+            -- This covers:
+            -- - PascalCaseWords (or the latter part of camelCaseWords)
+            '%u[%l%d]+%f[^%l%d]', -- An uppercase letter, 1+ lowercase letters, to end of lowercase letters
+
+            -- Matches lowercase letters up until not lowercase letter.
+            -- This covers:
+            -- - start of camelCaseWords (just the `camel`)
+            -- - snake_case_words in lowercase
+            -- - regular lowercase words
+            '%f[^%s%p][%l%d]+%f[^%l%d]', -- after whitespace/punctuation, 1+ lowercase letters, to end of lowercase letters
+            '^[%l%d]+%f[^%l%d]', -- after beginning of line, 1+ lowercase letters, to end of lowercase letters
+
+            -- Matches uppercase or lowercase letters up until not letters.
+            -- This covers:
+            -- - SNAKE_CASE_WORDS in uppercase
+            -- - Snake_Case_Words in titlecase
+            -- - regular UPPERCASE words
+            -- (it must be both uppercase and lowercase otherwise it will
+            -- match just the first letter of PascalCaseWords)
+            '%f[^%s%p][%a%d]+%f[^%a%d]', -- after whitespace/punctuation, 1+ letters, to end of letters
+            '^[%a%d]+%f[^%a%d]', -- after beginning of line, 1+ letters, to end of letters
+          },
+          '^().*()$',
+        },
+      },
+    },
+  },
+  { 'echasnovski/mini.bracketed', opts = {} },
   { 'echasnovski/mini.trailspace', opts = {} },
   { 'echasnovski/mini.comment', opts = {} },
   { 'echasnovski/mini.icons', opts = {} },
@@ -21,6 +65,34 @@ return {
         suffix_next = 'n', -- Suffix to search with "next" method
       },
     },
+  },
+  {
+    'echasnovski/mini.clue',
+    opts = function()
+      return {
+        triggers = {
+          { mode = 'n', keys = '<C-w>' },
+          -- Leader trigger
+          { mode = 'n', keys = '<Leader>w', desc = '+Treewalker' },
+        },
+        clues = {
+          require('mini.clue').gen_clues.windows({
+            submode_move = true,
+            submode_navigate = true,
+            submode_resize = true,
+          }),
+          --- Treewalker
+          { mode = 'n', keys = '<Leader>wj', postkeys = '<Leader>w' },
+          { mode = 'n', keys = '<Leader>wk', postkeys = '<Leader>w' },
+          { mode = 'n', keys = '<Leader>wh', postkeys = '<Leader>w' },
+          { mode = 'n', keys = '<Leader>wl', postkeys = '<Leader>w' },
+          { mode = 'n', keys = '<Leader>wK', postkeys = '<Leader>w' },
+          { mode = 'n', keys = '<Leader>wJ', postkeys = '<Leader>w' },
+          { mode = 'n', keys = '<Leader>wH', postkeys = '<Leader>w' },
+          { mode = 'n', keys = '<Leader>wL', postkeys = '<Leader>w' },
+        },
+      }
+    end,
   },
   {
     'echasnovski/mini.starter',

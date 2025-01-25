@@ -1,180 +1,170 @@
 return {
-  'saghen/blink.cmp',
-  dependencies = {
-    'rafamadriz/friendly-snippets',
-    'onsails/lspkind.nvim',
+  {
+    'saghen/blink.compat',
+    -- use the latest release, via version = '*', if you also use the latest release for blink.cmp
+    version = '*',
+    -- lazy.nvim will automatically load the plugin when it's required by blink.cmp
+    lazy = true,
+    -- make sure to set opts so that lazy.nvim calls blink.compat's setup
+    opts = {},
   },
-  version = '*',
-  ---@module 'blink.cmp'
-  ---@type blink.cmp.Config
-  opts = {
-    appearance = {
-      nerd_font_variant = 'mono',
+  {
+
+    'saghen/blink.cmp',
+    dependencies = {
+      'rafamadriz/friendly-snippets',
+      'onsails/lspkind.nvim',
     },
-    completion = {
-      accept = {
-        auto_brackets = { enabled = true },
+    version = '*',
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      appearance = {
+        nerd_font_variant = 'mono',
       },
-      documentation = {
-        auto_show = true,
-        auto_show_delay_ms = 250,
-        window = { border = 'rounded', max_width = 120, scrollbar = true },
-      },
-      list = {
-        selection = function(ctx)
-          return ctx.mode == 'cmdline' and 'auto_insert' or 'preselect'
-        end,
-      },
-      trigger = {
-
-        show_on_trigger_character = true,
-        show_on_accept_on_trigger_character = true,
-        show_on_insert_on_trigger_character = true,
-      },
-      menu = {
-        border = 'rounded',
-        cmdline_position = function()
-          if vim.g.ui_cmdline_pos ~= nil then
-            local pos = vim.g.ui_cmdline_pos -- (1, 0)-indexed
-            return { pos[1] - 1, pos[2] - 1 }
-          end
-          local height = (vim.o.cmdheight == 0) and 1 or vim.o.cmdheight
-          return { vim.o.lines - height, 0 }
-        end,
-        draw = {
-          gap = 1,
-          align_to_component = 'label',
-          columns = {
-            { 'kind_icon' },
-            { 'label', 'label_description', gap = 1 },
-            { 'kind' },
-          },
-          components = {
-            kind_icon = {
-              text = function(item)
-                local kind = require('lspkind').symbol_map[item.kind] or ''
-                return kind .. ' '
-              end,
-              highlight = function(item)
-                return 'CmpItemKind' .. item.kind
-              end,
-            },
-            label = {
-              width = { fill = true, max = 120 },
-              text = function(ctx)
-                return ctx.label .. ctx.label_detail
-              end,
-              highlight = function(ctx)
-                -- label and label details
-                local highlights = {
-                  { 0, #ctx.label, group = ctx.deprecated and 'CmpItemAbbrDeprecated' or 'CmpItemAbbr' },
-                }
-                if ctx.label_detail then
-                  table.insert(highlights, { #ctx.label, #ctx.label + #ctx.label_detail, group = '@comment' })
-                end
-
-                -- characters matched on the label by the fuzzy matcher
-                for _, idx in ipairs(ctx.label_matched_indices) do
-                  table.insert(highlights, { idx, idx + 1, group = 'CmpItemAbbrMatchFuzzy' })
-                end
-
-                return highlights
-              end,
-            },
-            label_description = {
-              width = {
-                max = 40,
-              },
-              text = function(item)
-                return item.label_description or ''
-              end,
-              highlight = function(item)
-                return '@comment'
-              end,
-            },
-            kind = {
-              text = function(item)
-                return item.kind
-              end,
-              highlight = function(item)
-                return 'CmpItemKind' .. item.kind
-              end,
-            },
+      completion = {
+        accept = {
+          auto_brackets = { enabled = true },
+        },
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 250,
+          window = { border = 'rounded', max_width = 100, scrollbar = true },
+        },
+        list = {
+          selection = {
+            auto_insert = false,
+            preselect = function(ctx)
+              return true
+            end,
           },
         },
-      },
-    },
-
-    keymap = {
-      ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-      ['<C-e>'] = { 'hide', 'fallback' },
-      ['<C-y>'] = { 'select_and_accept', 'fallback' },
-      ['<C-j>'] = {
-        function(cmp)
-          return cmp.select_next()
-        end,
-        'snippet_forward',
-        'fallback',
-      },
-      ['<C-k>'] = {
-        function(cmp)
-          return cmp.select_prev()
-        end,
-        'snippet_backward',
-        'fallback',
-      },
-      ['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
-      ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
-    },
-
-    signature = {
-      enabled = true,
-      window = { border = 'rounded' },
-    },
-
-    sources = {
-      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
-      cmdline = function()
-        local type = vim.fn.getcmdtype()
-        if type == '/' or type == '?' then
-          return { 'buffer' }
-        end
-        if type == ':' then
-          return { 'cmdline' }
-        end
-        if type == '=' then
-          return { 'lsp', 'buffer' }
-        end
-
-        return {}
-      end,
-
-      providers = {
-        lsp = {
-          min_keyword_length = 0,
-          score_offset = 0,
-        },
-        path = {
-          min_keyword_length = 2,
-        },
-        snippets = {
-          min_keyword_length = 2,
-        },
-        buffer = {
-          min_keyword_length = function(ctx)
-            if ctx.mode == 'cmdline' then
-              return 0
-            else
-              return 5
+        menu = {
+          border = 'rounded',
+          cmdline_position = function()
+            if vim.g.ui_cmdline_pos ~= nil then
+              local pos = vim.g.ui_cmdline_pos -- (1, 0)-indexed
+              return { pos[1] - 1, pos[2] - 1 } -- correcty align label
             end
+            local height = (vim.o.cmdheight == 0) and 1 or vim.o.cmdheight
+            return { vim.o.lines - height, 0 }
           end,
-          max_items = 5,
+          draw = {
+            gap = 2,
+            columns = {
+              { 'kind_icon' },
+              { 'label', 'label_description', gap = 1 },
+            },
+            components = {
+              label = {
+                width = { fill = true, max = 120, min = 30 },
+              },
+              label_description = {
+                width = {
+                  max = 40,
+                },
+              },
+            },
+          },
         },
-        lazydev = {
+      },
 
-          name = 'LazyDev',
-          module = 'lazydev.integrations.blink',
-          score_offset = 100,
+      keymap = {
+        preset = 'none',
+        ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+        ['<C-e>'] = { 'cancel', 'fallback' },
+        ['<C-y>'] = { 'select_and_accept' },
+        ['<tab>'] = {
+          'snippet_forward',
+        },
+        ['<S-tab>'] = {
+          'snippet_backward',
+        },
+        ['<C-j>'] = {
+          'select_next',
+          'snippet_forward',
+          'fallback',
+        },
+        ['<C-k>'] = {
+          'select_prev',
+          'snippet_backward',
+          'fallback',
+        },
+        ['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
+        ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
+      },
+
+      signature = {
+        enabled = true,
+        window = { border = 'rounded' },
+      },
+
+      sources = {
+        default = {
+          'lazydev',
+          'lsp',
+          'path',
+          'snippets',
+          'buffer',
+          'avante_commands',
+          'avante_mentions',
+          'avante_files',
+        },
+        cmdline = function()
+          local type = vim.fn.getcmdtype()
+          if type == '/' or type == '?' then
+            return { 'buffer' }
+          end
+          if type == ':' or type == '@' then
+            return { 'cmdline' }
+          end
+          if type == '=' then
+            return { 'lsp', 'buffer' }
+          end
+
+          return {}
+        end,
+
+        providers = {
+          path = {
+            min_keyword_length = 2,
+          },
+          snippets = {
+            min_keyword_length = 2,
+          },
+          buffer = {
+            min_keyword_length = function(ctx)
+              if ctx.mode == 'cmdline' then
+                return 0
+              else
+                return 5
+              end
+            end,
+            max_items = 5,
+          },
+          lazydev = {
+            name = 'LazyDev',
+            module = 'lazydev.integrations.blink',
+            score_offset = 100,
+          },
+          avante_commands = {
+            name = 'avante_commands',
+            module = 'blink.compat.source',
+            score_offset = 90, -- show at a higher priority than lsp
+            opts = {},
+          },
+          avante_files = {
+            name = 'avante_commands',
+            module = 'blink.compat.source',
+            score_offset = 100, -- show at a higher priority than lsp
+            opts = {},
+          },
+          avante_mentions = {
+            name = 'avante_mentions',
+            module = 'blink.compat.source',
+            score_offset = 1000, -- show at a higher priority than lsp
+            opts = {},
+          },
         },
       },
     },

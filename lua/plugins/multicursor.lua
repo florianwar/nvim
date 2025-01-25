@@ -1,4 +1,5 @@
 return {
+  -- TODO: this might benifit from mini-clue with a different keymap
   {
     'jake-stewart/multicursor.nvim',
     branch = '1.0',
@@ -21,7 +22,7 @@ return {
       end)
 
       -- Jump to the next word under cursor but do not add a cursor.
-      vim.keymap.set({ 'n', 'v' }, '<c-s>', function()
+      vim.keymap.set({ 'n', 'v' }, '<leader>mn', function()
         mc.skipCursor('*')
       end)
 
@@ -48,7 +49,7 @@ return {
         elseif mc.hasCursors() then
           mc.clearCursors()
         else
-          -- Default behavior, clear search highlights.
+          -- Default behavior.
           vim.cmd('noh')
         end
       end)
@@ -57,7 +58,7 @@ return {
       vim.keymap.set('n', '<leader>ma', mc.alignCursors, { desc = '[A]lign cursors' })
 
       -- Split visual selections by regex.
-      vim.keymap.set('v', 'S', mc.splitCursors)
+      vim.keymap.set('x', 'S', mc.splitCursors)
 
       -- Append/insert for each line of visual selections.
       vim.keymap.set('v', 'I', mc.insertVisual)
@@ -67,10 +68,10 @@ return {
       vim.keymap.set('v', 'M', mc.matchCursors)
 
       -- Rotate visual selection contents.
-      vim.keymap.set('v', '<leader>t', function()
+      vim.keymap.set('x', '<leader>t', function()
         mc.transposeCursors(1)
       end)
-      vim.keymap.set('v', '<leader>T', function()
+      vim.keymap.set('x', '<leader>T', function()
         mc.transposeCursors(-1)
       end)
 

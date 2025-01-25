@@ -1,8 +1,24 @@
 return {
   {
     'yetone/avante.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'stevearc/dressing.nvim',
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
+      'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
+      'zbirenbaum/copilot.lua', -- for providers='copilot'
+      {
+        'MeanderingProgrammer/render-markdown.nvim',
+        opts = {
+          ft = { 'markdown', 'Avante', 'nofile', 'noice' },
+        },
+        ft = { 'markdown', 'Avante', 'nofile', 'noice' },
+      },
+    },
     keys = { { '<leader>aa', '<cmd>Avante<cr>', desc = '[A]vante' } },
     build = 'make',
+
     opts = function()
       require('which-key').add({
         { '<leader>a', name = '[A]vante' },
@@ -38,20 +54,5 @@ return {
         },
       }
     end,
-
-    dependencies = {
-      'stevearc/dressing.nvim',
-      'nvim-lua/plenary.nvim',
-      'MunifTanjim/nui.nvim',
-      'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
-      'zbirenbaum/copilot.lua', -- for providers='copilot'
-      {
-        'MeanderingProgrammer/render-markdown.nvim',
-        opts = {
-          ft = { 'markdown', 'Avante', 'nofile', 'noice' },
-        },
-        ft = { 'markdown', 'Avante', 'nofile', 'noice' },
-      },
-    },
   },
 }

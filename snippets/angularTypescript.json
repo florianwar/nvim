@@ -1,0 +1,70 @@
+{
+  "Angular Standalone Component": {
+    "prefix": "act",
+    "description": "Angular standalone component",
+    "body": [
+      "import { ChangeDetectionStrategy, Component } from '@angular/core';",
+      "",
+      "@Component({",
+      "\tselector: '${1:selector-name}',",
+      "\timports: [],",
+      "\ttemplateUrl: '${2:name}.component.html',",
+      "\tstandalone: true,",
+      "\tchangeDetection: ChangeDetectionStrategy.OnPush",
+      "})",
+      "",
+      "export class ${3:Name}Component {",
+      "\t$0",
+      "}"
+    ]
+  },
+  "Angular Component with Inline Template": {
+    "prefix": "aci",
+    "description": "Angular component with an inline template",
+    "body": [
+      "import { ChangeDetectionStrategy, Component } from '@angular/core';",
+      "",
+      "@Component({",
+      "\tselector: '${1:selector-name}',",
+      "\timports: [],",
+      "\ttemplate: `$0`,",
+      "\tstandalone: true,",
+      "\tchangeDetection: ChangeDetectionStrategy.OnPush",
+      "})",
+      "",
+      "export class ${2:Name}Component {",
+      "",
+      "}"
+    ]
+  },
+  "Angular Pipe": {
+    "prefix": "apipe",
+    "description": "Angular pipe",
+    "body": [
+      "import { Pipe, PipeTransform } from '@angular/core';",
+      "",
+      "@Pipe({",
+      "\tname: '${1:selector-name}'",
+      "})",
+      "",
+      "export class ${2:Name}Pipe implements PipeTransform {",
+      "\ttransform(value: any, ...args: any[]): any {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ]
+  },
+  "Angular Service": {
+    "prefix": "aservice",
+    "description": "Angular Service with Injectable ProvidedIn Root",
+    "body": [
+      "import { Injectable } from '@angular/core';",
+      "",
+      "@Injectable({providedIn: ${1:'root'}})",
+      "export class ${2:ServiceName}Service {",
+      "\tconstructor() { }",
+      "\t$0",
+      "}"
+    ]
+  }
+}

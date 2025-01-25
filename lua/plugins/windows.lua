@@ -1,16 +1,19 @@
 return {
   {
-    'anuvyklack/windows.nvim',
+    'JoseConseco/windows.nvim',
     dependencies = {
       'anuvyklack/middleclass',
-      'anuvyklack/animation.nvim',
     },
     config = function()
-      vim.go.winwidth = 10
-      vim.go.winminwidth = 10
-      vim.go.equalalways = false
       require('windows').setup({
         animation = {
+          enable = false,
+        },
+        autowidth = {
+          enable = true,
+          winwidth = 10,
+        },
+        autoboth = {
           enable = false,
         },
       })

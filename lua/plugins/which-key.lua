@@ -14,7 +14,6 @@ return {
         { '<leader>g', group = '[G]it' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>t', group = '[T]oggle' },
-        { '<leader>w', group = '[W]orkspace' },
         { '<leader>x', group = 'Diagnosti[X]' },
       })
     end,

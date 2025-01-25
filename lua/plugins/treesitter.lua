@@ -8,28 +8,9 @@ return {
     init = function(_)
       require('nvim-treesitter.query_predicates') -- ensure queries are initialized for other plugins
     end,
-    dependencies = {
-      { 'nvim-treesitter/nvim-treesitter-textobjects' },
-      {
-        'chrisgrieser/nvim-various-textobjs',
-        opts = { keymaps = { useDefaults = true } },
-      },
-    },
     cmd = { 'TSUpdateSync', 'TSUpdate', 'TSInstall' },
     keys = {
       { '<c-space>', desc = 'Increment Selection' },
-      { ']f', desc = 'Move to next [F]unction start' },
-      { ']b', desc = 'Move to next [B]lock start' },
-      { ']C', DESC = 'Move to next [C]lass start' },
-      { ']B', desc = 'Move to next [B]lock end' },
-      { ']F', desc = 'Move to next [F]unction end' },
-      { ']C', desc = 'Move to next [C]lass end' },
-      { '[f', desc = 'Move to previous [F]unction start' },
-      { '[b', desc = 'Move to previous [B]lock start' },
-      { '[c', desc = 'Move to previous [c]lass start' },
-      { '[B', desc = 'Move to previous [B]lock end' },
-      { '[F', desc = 'Move to previous [F]unction end' },
-      { '[C', desc = 'Move to previous [C]lass end' },
       { '<bs>', desc = 'Decrement Selection', mode = 'x' },
     },
     ---@type TSConfig
@@ -48,6 +29,7 @@ return {
         'jsdoc',
         'json',
         'jsonc',
+        'kotlin',
         'lua',
         'luadoc',
         'luap',
@@ -56,6 +38,7 @@ return {
         'python',
         'query',
         'regex',
+        'scala',
         'scss',
         'toml',
         'tsx',
@@ -76,41 +59,13 @@ return {
       },
       textobjects = {
         move = {
-          enable = true,
-          goto_next_start = {
-            [']f'] = '@function.outer',
-            [']b'] = '@block.outer',
-            [']c'] = '@class.outer',
-          },
-          goto_next_end = {
-            [']F'] = '@function.outer',
-            [']B'] = '@block.outer',
-            [']C'] = '@class.outer',
-          },
-          goto_previous_start = {
-            ['[f'] = '@function.outer',
-            ['[b'] = '@block.outer',
-            ['[c'] = '@class.outer',
-          },
-          goto_previous_end = {
-            ['[F'] = '@function.outer',
-            ['[B'] = '@block.outer',
-            ['[C'] = '@class.outer',
-          },
+          enable = false,
         },
       },
     },
     config = function(_, opts)
       require('nvim-treesitter.configs').setup(opts)
     end,
-  },
-  -- Show Context for cursor
-  {
-    'nvim-treesitter/nvim-treesitter-context',
-    dependencies = { 'nvim-treesitter' },
-    enabled = false,
-    event = 'VeryLazy',
-    opts = { enable = 'true', mode = 'cursor', max_lines = 4 },
   },
   -- Autoclose <tags></tags>
   {
@@ -154,7 +109,7 @@ return {
   {
     'chrisgrieser/nvim-spider',
     opts = {
-      skipInsignificantPunctuation = false,
+      skipInsignificantPunctuation = true,
     },
     keys = {
       {
@@ -185,15 +140,16 @@ return {
   },
   {
     'aaronik/treewalker.nvim',
-    dependencies = { 'anuvyklack/hydra.nvim' },
     event = 'VeryLazy',
     keys = {
-      { '<s-up>', '<cmd>Treewalker Up<cr>', { desc = 'Treewalker Up' } },
-      { '<s-down>', '<cmd>Treewalker Down<cr>', { desc = 'Treewalker Down' } },
-      { '<s-left>', '<cmd>Treewalker Left<cr>', { desc = 'Treewalker Left' } },
-      { '<s-right>', '<cmd>Treewalker Right<cr>', { desc = 'Treewalker Right' } },
-      { '<s-f8>', '<cmd>Treewalker SwapUp<cr>', { desc = 'Treewalker SwapUp' } },
-      { '<s-f9>', '<cmd>Treewalker SwapDown<cr>', { desc = 'Treewalker SwapDown' } },
+      { '<leader>wk', '<cmd>Treewalker Up<cr>', desc = 'Up' },
+      { '<leader>wj', '<cmd>Treewalker Down<cr>', desc = 'Down' },
+      { '<leader>wh', '<cmd>Treewalker Left<cr>', desc = 'Left' },
+      { '<leader>wl', '<cmd>Treewalker Right<cr>', desc = 'Right' },
+      { '<leader>wK', '<cmd>Treewalker SwapUp<cr>', desc = 'Swap Up' },
+      { '<leader>wJ', '<cmd>Treewalker SwapDown<cr>', desc = 'Swap Down' },
+      { '<leader>wH', '<cmd>Treewalker SwapLeft<cr>', desc = 'Swap Left' },
+      { '<leader>wL', '<cmd>Treewalker SwapRight<cr>', desc = 'SwapRight' },
     },
     opts = {},
   },
