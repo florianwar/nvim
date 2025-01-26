@@ -73,7 +73,8 @@ return {
         triggers = {
           { mode = 'n', keys = '<C-w>' },
           -- Leader trigger
-          { mode = 'n', keys = '<Leader>w', desc = '+Treewalker' },
+          { mode = 'n', keys = '<Leader>w' },
+          { mode = 'n', keys = '<Leader>m' },
         },
         clues = {
           require('mini.clue').gen_clues.windows({
@@ -81,6 +82,7 @@ return {
             submode_navigate = true,
             submode_resize = true,
           }),
+
           --- Treewalker
           { mode = 'n', keys = '<Leader>wj', postkeys = '<Leader>w' },
           { mode = 'n', keys = '<Leader>wk', postkeys = '<Leader>w' },
@@ -90,6 +92,18 @@ return {
           { mode = 'n', keys = '<Leader>wJ', postkeys = '<Leader>w' },
           { mode = 'n', keys = '<Leader>wH', postkeys = '<Leader>w' },
           { mode = 'n', keys = '<Leader>wL', postkeys = '<Leader>w' },
+
+          --- Multicursor
+
+          { mode = 'n', keys = '<Leader>mj', postkeys = '<Leader>m' },
+          { mode = 'n', keys = '<Leader>mk', postkeys = '<Leader>m' },
+          { mode = 'n', keys = '<Leader>ma', postkeys = '<Leader>m' },
+          { mode = 'n', keys = '<Leader>mN', postkeys = '<Leader>m' },
+          { mode = 'n', keys = '<Leader>mn', postkeys = '<Leader>m' },
+          { mode = 'n', keys = '<Leader>mh', postkeys = '<Leader>m' },
+          { mode = 'n', keys = '<Leader>ml', postkeys = '<Leader>m' },
+          { mode = 'n', keys = '<Leader>md', postkeys = '<Leader>m' },
+          { mode = 'n', keys = '<Leader>mm', postkeys = '<Leader>m' },
         },
       }
     end,

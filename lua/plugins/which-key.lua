@@ -12,7 +12,7 @@ return {
         { '<leader>c', group = '[C]ode' },
         { '<leader>f', group = '[F]find' },
         { '<leader>g', group = '[G]it' },
-        { '<leader>r', group = '[R]ename' },
+        { '<leader>r', group = '[R]efactor' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>x', group = 'Diagnosti[X]' },
       })
