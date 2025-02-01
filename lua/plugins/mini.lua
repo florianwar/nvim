@@ -43,7 +43,7 @@ return {
       },
     },
   },
-  { 'echasnovski/mini.bracketed', opts = {} },
+  { 'echasnovski/mini.bracketed', opts = { treesitter = { suffix = 'T' } } },
   { 'echasnovski/mini.trailspace', opts = {} },
   { 'echasnovski/mini.comment', opts = {} },
   { 'echasnovski/mini.icons', opts = {} },

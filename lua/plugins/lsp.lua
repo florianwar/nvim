@@ -5,13 +5,13 @@ return {
       { 'williamboman/mason.nvim', config = true },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
-      -- 'hrsh7th/cmp-nvim-lsp',
       'saghen/blink.cmp',
       {
         'j-hui/fidget.nvim',
         opts = { progress = { display = { render_limit = 2 } }, notification = { window = { winblend = 0 } } },
       },
       { 'yioneko/nvim-vtsls' },
+      { 'maan2003/lsp_lines.nvim', opts = {} },
       { 'dmmulroy/ts-error-translator.nvim', opts = {} },
     },
     config = function()
@@ -44,13 +44,15 @@ return {
             vim.diagnostic.goto_prev({ severity = 'ERROR' })
           end, 'Prev [E]rror')
 
+          map('<leader>l', require('lsp_lines').toggle, 'In[L]ine diagnostics')
+
           local client = vim.lsp.get_client_by_id(event.data.client_id)
 
           -- Toggle InlayHints
           if client and client.server_capabilities.inlayHintProvider then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }))
-            end, '[T]oggle Inlay [H]ints')
+            end, 'Inlay [H]ints')
           end
 
           -- Diagnostics
@@ -67,7 +69,9 @@ return {
                 [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
               },
             },
-            virtual_text = true,
+            virtual_text = false,
+            virtual_lines = true,
+
             float = {
               show_header = true,
               source = true,
@@ -89,7 +93,7 @@ return {
           -- see: https://github.com/yioneko/vtsls/blob/main/packages/service/configuration.schema.json
           handlers = {
             ['textDocument/publishDiagnostics'] = function(err, result, ctx, config)
-              require('ts-error-translator').translate_diagnostics(err, result, ctx, config)
+              require('ts-error-translator').translate_diagnostics(err, result, ctx)
               vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
             end,
           },
@@ -202,35 +206,9 @@ return {
     },
   },
   {
-    'VidocqH/lsp-lens.nvim',
-    event = 'LspAttach',
-    opts = {
-      enable = true,
-      sections = {
-        definition = false,
-        references = function(count)
-          return '󰌹 Ref: ' .. count
-        end,
-        implements = function(count)
-          return '󰡱 Imp: ' .. count
-        end,
-        git_authors = false,
-      },
-    },
-    keys = {
-      { '<leader>te', '<cmd>LspLensToggle<cr>', desc = '[T]oggle Lsp L[e]ns' },
-    },
-  },
-  {
     'Wansmer/symbol-usage.nvim',
-    enable = false,
-    event = function()
-      if vim.fn.has('nvim-0.10') == 1 then
-        return 'LspAttach'
-      else
-        return 'BufRead'
-      end
-    end,
+    enabled = true,
+    event = 'LspAttach',
     opts = {
       vt_position = 'end_of_line',
       text_format = function(symbol)

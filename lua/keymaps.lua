@@ -33,6 +33,9 @@ map({ 'n', 'x' }, 'D', [["_D]])
 map({ 'n', 'x' }, 'x', [["_x]])
 map({ 'n', 'x' }, 'X', [["_X]])
 
+map('n', '[t', '<cmd>tabprev<cr>', { desc = 'Previous Tab' })
+map('n', ']t', '<cmd>tabnext<cr>', { desc = 'Next Tab' })
+
 -- cut with "m"
 map({ 'n', 'x' }, 'm', 'd', { noremap = true })
 map('n', 'mm', 'dd', { noremap = true })

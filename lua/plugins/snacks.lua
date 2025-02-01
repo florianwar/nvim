@@ -15,11 +15,14 @@ return {
       bigfile = { enabled = true },
       dashboard = { enabled = true },
       indent = {
-        enabled = true,
+        enabled = false,
         chunk = { enabled = false },
       },
       input = { enabled = true },
-      notifier = { enabled = true },
+      notifier = {
+        enabled = true,
+        level = vim.log.levels.INFO,
+      },
       quickfile = { enabled = true },
       scroll = { enabled = false },
       statuscolumn = { enabled = true },

@@ -54,11 +54,16 @@ return {
           mappings = {
             i = {
               ['<esc>'] = require('telescope.actions').close,
-              ['<c-t>'] = require('trouble.sources.telescope').open,
+              ['<c-q>'] = require('trouble.sources.telescope').open,
+              ['<c-t>'] = require('telescope.actions').select_tab,
+              ['<c-v>'] = require('telescope.actions').select_horizontal,
+              ['<c-x>'] = require('telescope.actions').select_vertical,
+              ['<c-u>'] = require('telescope.actions').preview_scrolling_up,
+              ['<c-d>'] = require('telescope.actions').preview_scrolling_down,
               ['<C-j>'] = require('telescope.actions').move_selection_next,
               ['<C-k>'] = require('telescope.actions').move_selection_previous,
             },
-            n = { ['<c-t>'] = require('trouble.sources.telescope').open }, -- ['<C-q>'] = require('telescope.actions').close,
+            n = { ['<c-q>'] = require('trouble.sources.telescope').open }, -- ['<C-q>'] = require('telescope.actions').close,
           },
         },
         pickers = {
