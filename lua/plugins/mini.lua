@@ -43,8 +43,15 @@ return {
       },
     },
   },
-  { 'echasnovski/mini.bracketed', opts = { treesitter = { suffix = 'T' } } },
+  {
+    'echasnovski/mini.bracketed',
+    opts = {
+      treesitter = { suffix = 'T' },
+      comment = { suffix = '' }, -- disable since it conflicts with vimdiff
+    },
+  },
   { 'echasnovski/mini.trailspace', opts = {} },
+  { 'echasnovski/mini.diff', opts = {} },
   { 'echasnovski/mini.comment', opts = {} },
   { 'echasnovski/mini.icons', opts = {} },
   { 'echasnovski/mini.pairs', opts = {} },
@@ -196,12 +203,12 @@ return {
       },
       {
         'n',
-        '<Cmd>lua vim.cmd("normal! n"); MiniAnimate.execute_after("scroll", "normal! zvzz")<CR>',
+        '<Cmd>lua vim.cmd("keepjumps normal! n"); MiniAnimate.execute_after("scroll", "normal! zzzv")<CR>',
         desc = 'Jump to Next',
       },
       {
         'N',
-        '<Cmd>lua vim.cmd("normal! N"); MiniAnimate.execute_after("scroll", "normal! zvzz")<CR>',
+        '<Cmd>lua vim.cmd("keepjumps normal! N"); MiniAnimate.execute_after("scroll", "normal! zzzv")<CR>',
         desc = 'Jump to Previous',
       },
     },
@@ -229,7 +236,7 @@ return {
         },
         resize = {
           enable = true,
-          timing = animate.gen_timing.linear({ duration = 20, unit = 'total' }),
+          timing = animate.gen_timing.linear({ duration = 25, unit = 'total' }),
         },
         scroll = {
           timing = animate.gen_timing.linear({ duration = 30, unit = 'total' }),

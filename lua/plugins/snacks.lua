@@ -13,7 +13,8 @@ return {
         end,
       },
       bigfile = { enabled = true },
-      dashboard = { enabled = true },
+      dashboard = { enabled = false },
+      images = { enabled = true },
       indent = {
         enabled = false,
         chunk = { enabled = false },
@@ -27,8 +28,13 @@ return {
       scroll = { enabled = false },
       statuscolumn = { enabled = true },
       words = { enabled = false },
+      scratch = {
+        enabled = true,
+        ft = 'markdown',
+      },
       styles = {
         notification = {
+          relative = 'editor',
           wo = { wrap = true }, -- Wrap notifications
         },
       },

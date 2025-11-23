@@ -2,8 +2,8 @@ return {
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
-      { 'williamboman/mason.nvim', config = true },
-      'williamboman/mason-lspconfig.nvim',
+      { 'mason-org/mason.nvim', config = true },
+      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       'saghen/blink.cmp',
       {
@@ -11,7 +11,7 @@ return {
         opts = { progress = { display = { render_limit = 2 } }, notification = { window = { winblend = 0 } } },
       },
       { 'yioneko/nvim-vtsls' },
-      { 'maan2003/lsp_lines.nvim', opts = {} },
+      { 'b0o/schemastore.nvim', version = false },
       { 'dmmulroy/ts-error-translator.nvim', opts = {} },
     },
     config = function()
@@ -35,16 +35,21 @@ return {
 
           -- diagnostics
           map('<leader>cd', vim.diagnostic.open_float, '[D]iagnostic')
-          map(']d', vim.diagnostic.goto_next, 'Next [D]iagnostic')
-          map('[d', vim.diagnostic.goto_prev, 'Prev [D]iagnostic')
+          map(']d', function()
+            vim.diagnostic.jump({ count = 1, float = true })
+          end, 'Next [D]iagnostic')
+          map('[d', function()
+            vim.diagnostic.jump({ count = -1, float = true })
+            vim.diagnostic.open_float()
+          end, 'Prev [D]iagnostic')
           map(']e', function()
-            vim.diagnostic.goto_next({ severity = 'ERROR' })
+            vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR, float = true })
+            vim.diagnostic.open_float()
           end, 'Next [E]rror')
           map('[e', function()
-            vim.diagnostic.goto_prev({ severity = 'ERROR' })
+            vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR, float = true })
+            vim.diagnostic.open_float()
           end, 'Prev [E]rror')
-
-          map('<leader>l', require('lsp_lines').toggle, 'In[L]ine diagnostics')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
 
@@ -69,13 +74,12 @@ return {
                 [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
               },
             },
-            virtual_text = false,
-            virtual_lines = true,
+            virtual_text = true,
+            virtual_lines = false,
 
             float = {
               show_header = true,
               source = true,
-              border = 'rounded',
               max_width = 120,
               max_height = 40,
               focusable = true,
@@ -86,17 +90,11 @@ return {
         end,
       })
 
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      -- local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       local servers = {
+        angularls = {},
         vtsls = {
-          -- see: https://github.com/yioneko/vtsls/blob/main/packages/service/configuration.schema.json
-          handlers = {
-            ['textDocument/publishDiagnostics'] = function(err, result, ctx, config)
-              require('ts-error-translator').translate_diagnostics(err, result, ctx)
-              vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
-            end,
-          },
           settings = {
             vtsls = {
               autoUseWorkspaceTsdk = true,
@@ -104,14 +102,18 @@ return {
                 globalPlugins = {
                   {
                     name = '@angular/language-server',
-                    location = require('mason-registry').get_package('angular-language-server'):get_install_path()
-                      .. '/node_modules/@angular/language-server',
-                    enableForWorkspaceTypeScriptVersions = false,
+                    location = vim.fn.exepath('angular-language-server') .. '/node_modules/@angular/language-server',
+                    enableForWorkspaceTypeScriptVersions = true,
                   },
                 },
               },
             },
             typescript = {
+              format = {
+                convertTabsToSpaces = true,
+                indentSize = 2,
+                tabSize = 2,
+              },
               suggest = {
                 completeFunctionCalls = true,
               },
@@ -126,11 +128,45 @@ return {
             },
           },
         },
-        jsonls = {},
+        cssls = {},
+        jsonls = {
+          settings = {
+            json = {
+              schemas = require('schemastore').json.schemas(),
+              format = {
+                enable = true,
+              },
+              validate = { enable = true },
+            },
+          },
+        },
+        kotlin_language_server = {}, -- currently
+        html = {
+          filetypes = { 'htmlangular', 'html' },
+        },
+        -- xml
+        lemminx = {},
+        -- kotlin_lsp = {}, -- official lsp from JetBrains, currently no support for maven
+        ktlint = {
+          filetypes = { 'kotlin' },
+          init_options = {
+            enable = true,
+            experimental = true,
+          },
+        },
         eslint = {
           settings = {
             -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
             workingDirectories = { mode = 'auto' },
+          },
+          filetypes = {
+            'javascript',
+            'javascriptreact',
+            'javascript.jsx',
+            'typescript',
+            'typescriptreact',
+            'typescript.tsx',
+            'htmlangular',
           },
         },
         lua_ls = {
@@ -151,10 +187,12 @@ return {
         'stylua',
         'prettier',
         'prettierd',
+        'ktfmt',
         --
         'fixjson', -- json
         'jq', -- json
         'shellcheck', -- sh
+        'sqlfmt', -- sql
         'beautysh', -- bash
         'yamlfmt', -- yaml
         'taplo', -- toml
@@ -166,15 +204,14 @@ return {
 
       require('lspconfig.configs').vtsls = require('vtsls').lspconfig
 
-      require('mason-lspconfig').setup({
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      })
+      for server_name, config in pairs(servers) do
+        if server_name == 'angularls' then
+          config.capabilities = config.capabilities or {}
+          config.capabilities.renameProvider = false
+        end
+        vim.lsp.config(server_name, config)
+        vim.lsp.enable(server_name)
+      end
     end,
   },
   {
@@ -245,7 +282,10 @@ return {
           c = true,
           cpp = true,
           json = false,
+          markdown = false,
           yaml = true,
+          kotlin = true,
+          xml = false,
         }
 
         return {
@@ -258,21 +298,23 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        svelte = { 'prettierd', stop_after_first = true },
-        htmlangular = { 'prettier', stop_after_first = true },
-        javascript = { 'prettier', stop_after_first = true },
-        typescript = { 'prettier', stop_after_first = true },
-        javascriptreact = { 'prettier', stop_after_first = true },
-        typescriptreact = { 'prettier', stop_after_first = true },
+        svelte = { 'prettierd' },
+        htmlangular = { 'prettier' },
+        javascript = { 'prettier' },
+        typescript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescriptreact = { 'prettier' },
         json = { 'fixjson' },
-        graphql = { 'prettier', stop_after_first = true },
-        markdown = { 'prettier', stop_after_first = true },
-        bash = { 'beautysh' },
+        graphql = { 'prettier' },
+        -- kotlin = { 'ktfmt' },
+        markdown = { 'prettier' },
+        -- bash = { 'beautysh' },
         -- yaml = { 'yamlfmt' },
         toml = { 'taplo' },
-        css = { 'prettier', stop_after_first = true },
-        scss = { 'prettier', stop_after_first = true },
-        sh = { { 'shellcheck' } },
+        sql = { 'sqlfmt' },
+        css = { 'prettier' },
+        scss = { 'prettier' },
+        -- sh = { 'shellcheck' },
       },
     },
   },

@@ -12,6 +12,7 @@ return {
         autowidth = {
           enable = true,
           winwidth = 10,
+          animation = false,
         },
         autoboth = {
           enable = false,

@@ -5,7 +5,7 @@ return {
       { '<leader>ff', '<cmd>GrugFar<cr>', desc = '[F]ind and Replace in Workspace' },
     },
     opts = {
-      windowCreationCommand = 'split',
+      windowCreationCommand = 'vsplit',
     },
   },
 }

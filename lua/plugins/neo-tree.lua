@@ -25,7 +25,6 @@ return {
         end,
       },
     },
-    popup_border_style = 'rounded',
     window = {
       width = 60,
       mappings = {

@@ -36,7 +36,7 @@ return {
               end,
             },
           },
-          lualine_x = {},
+          lualine_x = { 'overseer' },
           lualine_y = {
             {
               -- Show macro recording status

@@ -1,5 +1,8 @@
 local map = vim.keymap.set
 
+vim.keymap.set('n', 'j', [[(v:count > 1 ? 'm`' . v:count : 'g') . 'j']], { expr = true })
+vim.keymap.set('n', 'k', [[(v:count > 1 ? 'm`' . v:count : 'g') . 'k']], { expr = true })
+
 -- Redo
 map('n', 'U', '<C-r>', { desc = 'Redo', noremap = true })
 
@@ -15,8 +18,8 @@ map('n', '<A-k>', '<cmd>m .-2<cr>==', { desc = 'Move Up', silent = true })
 -- keep movements in the middle -> Handled by mini-animate
 -- map('n', '<c-d>', '<c-d>zz', { desc = 'Scroll Down' })
 -- map('n', '<c-u>', '<c-u>zz', { desc = 'Scroll Up' })
--- map('n', 'n', 'nzzzv', { desc = 'Jump to Next' })
--- map('n', 'N', 'Nzzzv', { desc = 'Jump to Previous' })
+-- map('n', 'n', ':keepjumps normal! nzzzv<cr>')
+-- map('n', 'N', ':keepjumps normal! Nzzzv<cr>')
 
 map('n', '<leader><tab>', '<c-^>', { desc = 'Toggle last Buffers' })
 
@@ -56,6 +59,7 @@ map('n', '<', '<<')
 map('v', '<', '<gv')
 map('n', '>', '>>')
 map('v', '>', '>gv')
+map('t', '<esc>', [[<C-\><C-n>]])
 
 -- Search visually selected text
 map('x', '*', [[y/\V<C-R>=escape(@", '/\')<CR><CR>]], { desc = 'Search Selected Text', silent = true })

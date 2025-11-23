@@ -16,7 +16,7 @@ opt.tabstop = 2
 opt.number = true
 opt.relativenumber = true
 opt.showmode = false
-opt.laststatus = 1
+opt.laststatus = 3
 opt.signcolumn = 'yes:1'
 
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
@@ -35,11 +35,13 @@ opt.sidescrolloff = 8
 opt.smoothscroll = true
 opt.splitright = true
 opt.splitbelow = true
+opt.splitkeep = 'screen'
 
 opt.list = true
 opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 opt.conceallevel = 1
 
+opt.undodir = vim.fn.stdpath('state') .. '/undo'
 opt.undofile = true
 opt.autowrite = true
 opt.swapfile = false
@@ -52,6 +54,7 @@ opt.timeoutlen = 300
 opt.termguicolors = true
 opt.pumblend = 0
 opt.pumheight = 15
+opt.winborder = 'rounded'
 
 opt.formatoptions:remove('o')
 

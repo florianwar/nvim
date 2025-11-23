@@ -23,6 +23,7 @@ return {
         'bash',
         'c',
         'csv',
+        'css',
         'diff',
         'html',
         'javascript',

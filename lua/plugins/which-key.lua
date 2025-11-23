@@ -9,10 +9,14 @@ return {
       })
 
       which_key.add({
+        { '<leader>a', group = '[A]I' },
         { '<leader>c', group = '[C]ode' },
-        { '<leader>f', group = '[F]find' },
+        { '<leader>d', group = '[D]atabase' },
+        { '<leader>f', group = '[F]ind' },
         { '<leader>g', group = '[G]it' },
-        { '<leader>r', group = '[R]efactor' },
+        { '<leader>n', group = '[N]eotest' },
+        { '<leader>o', group = '[O]bsidian' },
+        { '<leader>r', group = '[R]elated' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>x', group = 'Diagnosti[X]' },
       })

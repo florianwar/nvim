@@ -279,6 +279,7 @@ M.single_line = function()
     '(UwU)',
     '＼（〇_ｏ）／',
   }
+
   return lib[math.random(#lib)]
 end
 
@@ -287,6 +288,10 @@ M.random_single_line_every = function(seconds)
 
   local timer = vim.uv.new_timer()
   timer:start(0, seconds * 1000, function()
+    if M.single_line == nil then
+      return
+    end
+
     current_ascii_art = M.single_line()
   end)
 

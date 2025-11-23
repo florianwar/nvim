@@ -35,7 +35,7 @@ return {
     end,
     opts = {
       ui = {
-        enable = true, -- set to false to disable all additional syntax features
+        enable = false, -- set to false to disable all additional syntax features
         update_debounce = 200,
         checkboxes = {
           [' '] = { char = '󰄱 ', hl_group = 'ObsidianTodo' },
