@@ -18,7 +18,6 @@ return {
 
       return {
         options = {
-          theme = 'catppuccin',
           globalstatus = true,
           disabled_filetypes = { statusline = {} },
         },

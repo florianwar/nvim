@@ -90,13 +90,22 @@ return {
         end,
       })
 
-      -- local capabilities = require('blink.cmp').get_lsp_capabilities()
-
+      ---@type vim.lsp.Config
       local servers = {
-        angularls = {},
+        angularls = {
+          settings = {
+            angular = {
+              experimental = {
+                templateInterpolationService = true,
+              },
+            },
+          },
+        },
         vtsls = {
+          ---@type lspconfig.settings.vtsls
           settings = {
             vtsls = {
+
               autoUseWorkspaceTsdk = true,
               tsserver = {
                 globalPlugins = {
@@ -130,6 +139,7 @@ return {
         },
         cssls = {},
         jsonls = {
+          ---@type lspconfig.settings.jsonls
           settings = {
             json = {
               schemas = require('schemastore').json.schemas(),
@@ -155,7 +165,9 @@ return {
           },
         },
         eslint = {
+          ---@type lspconfig.settings.eslint
           settings = {
+
             -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
             workingDirectories = { mode = 'auto' },
           },
@@ -170,6 +182,7 @@ return {
           },
         },
         lua_ls = {
+          ---@type lspconfig.settings.lua_ls
           settings = {
             Lua = {
               completion = {
