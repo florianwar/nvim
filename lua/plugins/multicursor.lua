@@ -6,11 +6,23 @@ return {
       require('which-key').add({
         { '<leader>m', group = '[M]ulticursor' },
       })
-
       local mc = require('multicursor-nvim')
-
       mc.setup()
 
+      -- align with vim-multiple-cursors keymaps.
+      vim.keymap.set('v', '<c-n>', function()
+        mc.visualToCursors()
+      end, { desc = 'Insert Cursor for each line' })
+      vim.keymap.set('n', '<a-n>', mc.matchAllAddCursors, { desc = 'Add cursors for all matches' })
+      vim.keymap.set('n', '<c-n>', function()
+        mc.matchAddCursor(1)
+      end, { desc = 'Add for next word' })
+      vim.keymap.set('n', '<c-x>', function()
+        mc.matchSkipCursor(1)
+      end, { desc = 'Add for next word' })
+      vim.keymap.set('n', '<c-p>', mc.deleteCursor, { desc = 'Add for next word' })
+
+      -- nvim fallback mappings, probably redundant
       vim.keymap.set({ 'n', 'v' }, '<leader>mj', function()
         mc.addCursor('j')
       end, { desc = 'Add below' })
@@ -49,7 +61,7 @@ return {
         end
       end, { desc = 'move main cursor only' })
 
-      vim.keymap.set('n', '<leader>mq', '<c-c>', { silent = true, desc = 'end clue state' })
+      vim.keymap.set('n', '<leader>m<esc>', '<c-c>', { silent = true, desc = 'end clue state' })
 
       -- Align cursor columns.
       vim.keymap.set('n', '<leader>mA', mc.alignCursors, { desc = 'Align column' })
